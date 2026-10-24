@@ -1,0 +1,3319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1e3a8a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Cirque EPS">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <title>Mon spectacle en Arts du cirque - EPS 6ème</title>
+
+  <!-- MANIFESTE PWA (fichier séparé, obligatoire pour une installation indépendante) -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #f1f5f9;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --accent: #f59e0b;
+      --success: #16a34a;
+      --stage-floor: #fef08a;
+      --stage-border: #ca8a04;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Comic Sans MS", "Chalkboard SE", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 12px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    header {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      border: 2px solid var(--border);
+      margin-bottom: 14px;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-title h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: #1e3a8a;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-title small {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .select-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #e2e8f0;
+      border: 2px solid #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .select-pill select {
+      background: transparent;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #1e293b;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .btn-class-action {
+      background: #cbd5e1;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-weight: 800;
+      color: #1e293b;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
+    }
+    .btn-class-action:hover {
+      background: #94a3b8;
+    }
+
+    .save-indicator {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #dcfce7;
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1.5px solid #86efac;
+    }
+
+    /* BARRE D'ACCUEIL / RETOUR RAPIDE */
+    .top-nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 10px;
+    }
+
+    .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      color: #1e3a8a;
+      border: 2.5px solid #1e3a8a;
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(30,58,138,0.12);
+      transition: all 0.15s ease;
+    }
+    .btn-back-home:hover {
+      background: #1e3a8a;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    /* GRANDE PAGE D'ACCUEIL AVEC 3 GRANDES PASTILLES / CARTES */
+    .hub-container {
+      max-width: 960px;
+      margin: 0 auto 20px auto;
+    }
+
+    .hub-hero {
+      text-align: center;
+      padding: 16px 10px;
+      margin-bottom: 12px;
+    }
+
+    .hub-hero h2 {
+      margin: 0 0 6px 0;
+      font-size: 1.6rem;
+      color: #1e3a8a;
+      font-weight: 900;
+    }
+
+    .hub-hero p {
+      margin: 0;
+      font-size: 1.05rem;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .hub-menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .hub-big-card {
+      background: #ffffff;
+      border-radius: 20px;
+      border: 3.5px solid #cbd5e1;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      user-select: none;
+    }
+
+    .hub-big-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .hub-big-card.card-choreo {
+      border-color: #2563eb;
+      background: linear-gradient(180deg, #eff6ff 0%, #ffffff 40%);
+    }
+    .hub-big-card.card-choreo:hover {
+      border-color: #1d4ed8;
+      box-shadow: 0 10px 22px rgba(37,99,235,0.22);
+    }
+
+    .hub-big-card.card-artist {
+      border-color: #0d9488;
+      background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 40%);
+    }
+    .hub-big-card.card-artist:hover {
+      border-color: #0f766e;
+      box-shadow: 0 10px 22px rgba(13,148,136,0.22);
+    }
+
+    .hub-big-card.card-overview {
+      border-color: #ea580c;
+      background: linear-gradient(180deg, #fff7ed 0%, #ffffff 40%);
+    }
+    .hub-big-card.card-overview:hover {
+      border-color: #c2410c;
+      box-shadow: 0 10px 22px rgba(234,88,12,0.22);
+    }
+
+    .hub-card-icon {
+      font-size: 3.2rem;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .hub-card-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      margin-bottom: 6px;
+      color: #0f172a;
+    }
+
+    .hub-card-desc {
+      font-size: 0.95rem;
+      color: #64748b;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 14px;
+      flex: 1;
+    }
+
+    .hub-card-action-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .card-choreo .hub-card-action-badge { background: #2563eb; }
+    .card-artist .hub-card-action-badge { background: #0d9488; }
+    .card-overview .hub-card-action-badge { background: #ea580c; }
+
+    /* CARTES ET BLOCS DE CONTENU */
+    .card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 16px 18px;
+      border: 2px solid var(--border);
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      margin: 0 0 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #1e293b;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 8px;
+    }
+
+    .troupe-inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    .student-badge-input {
+      display: flex;
+      align-items: center;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .student-dot {
+      width: 32px;
+      height: 100%;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .student-badge-input input {
+      border: none;
+      padding: 8px 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      width: 100%;
+      outline: none;
+    }
+
+    /* BARRE D'ONGLETS CHORÉGRAPHE (5 ÉTAPES NARRATIVES) */
+    .tabs-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      min-width: 145px;
+      padding: 12px 10px;
+      border: 2.5px solid transparent;
+      border-radius: 14px;
+      background: #e2e8f0;
+      color: #334155;
+      font-weight: 900;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-align: center;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: #1d4ed8;
+      box-shadow: 0 3px 8px rgba(37,99,235,0.35);
+    }
+
+    /* PASTILLES (CHIPS) BIEN PLUS GROSSES ET TACTILES POUR 6ÈME */
+    .chips-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .chip-item {
+      padding: 9px 16px;
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      border-radius: 22px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      user-select: none;
+      color: #334155;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .chip-item.active {
+      background: #dbeafe;
+      border-color: #2563eb;
+      color: #1d4ed8;
+      box-shadow: 0 2px 6px rgba(37,99,235,0.2);
+    }
+
+    .chip-item.custom {
+      background: #ffedd5;
+      color: #9a3412;
+      border-color: #fdba74;
+    }
+
+    .chip-item.custom.active {
+      background: #ea580c;
+      color: #ffffff;
+      border-color: #c2410c;
+    }
+
+    .chip-delete-btn {
+      font-size: 13px;
+      margin-left: 4px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.2);
+      color: #fff;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .choreo-chip-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      background: #f8fafc;
+      border: 2px solid var(--border);
+      border-radius: 24px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      color: #334155;
+      transition: all 0.15s ease;
+    }
+
+    .choreo-chip-btn.is-active {
+      background: #fef08a;
+      border-color: #ca8a04;
+      color: #854d0e;
+      box-shadow: 0 0 0 3px rgba(234,179,8,0.3);
+    }
+
+    .custom-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .custom-input-row input {
+      flex: 1;
+      padding: 9px 12px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.95rem;
+    }
+
+    .btn-action-small {
+      padding: 8px 16px;
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .moments-control-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      background: #e2e8f0;
+      padding: 8px 12px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+    }
+
+    .moment-pill {
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 900;
+      border: 2px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+      color: #334155;
+    }
+
+    .moment-pill.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary-dark);
+    }
+
+    .btn-mini {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      font-weight: 900;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-accent { background: #f59e0b; color: #fff; }
+    .btn-danger { background: #ef4444; color: #fff; }
+    .btn-neutral { background: #64748b; color: #fff; }
+
+    /* PLATEAU SCÉNIQUE & PIONS AGRANDIS POUR DOIGTS D'ÉLÈVES */
+    .stage-canvas-box {
+      position: relative;
+      width: 100%;
+      height: 330px;
+      background: radial-gradient(circle at center, #fef9c3 0%, var(--stage-floor) 70%, #fde047 100%);
+      border: 3.5px solid var(--stage-border);
+      border-radius: 18px;
+      overflow: hidden;
+      touch-action: none;
+      user-select: none;
+      box-shadow: inset 0 0 20px rgba(180,83,9,0.18);
+    }
+
+    .stage-header-label {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #854d0e;
+      background: rgba(254, 240, 138, 0.95);
+      padding: 3px 12px;
+      border-radius: 8px;
+      letter-spacing: 0.6px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .stage-audience-bar {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: #b45309;
+      color: #ffffff;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 900;
+      padding: 7px 0;
+      letter-spacing: 1px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .stage-wings {
+      position: absolute;
+      top: 0;
+      bottom: 32px;
+      width: 44px;
+      background: rgba(148, 163, 184, 0.2);
+      border-style: dashed;
+      border-color: rgba(148, 163, 184, 0.6);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      writing-mode: vertical-rl;
+      font-size: 0.75rem;
+      font-weight: 900;
+      color: #475569;
+      letter-spacing: 2px;
+      z-index: 1;
+    }
+    .stage-wings.left { left: 0; border-width: 0 1.5px 0 0; }
+    .stage-wings.right { right: 0; border-width: 0 0 0 1.5px; }
+
+    .stage-svg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .performer-node {
+      position: absolute;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 900;
+      cursor: grab;
+      user-select: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      touch-action: none;
+      border: 3px solid #ffffff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+
+    .performer-node:active {
+      cursor: grabbing;
+      transform: translate(-50%, -50%) scale(1.18);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+    }
+
+    .performer-node.is-choreo {
+      border: 4px solid #facc15;
+      box-shadow: 0 0 14px rgba(250, 204, 21, 0.95), 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .performer-node .crown-icon {
+      position: absolute;
+      top: -16px;
+      font-size: 16px;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+    }
+
+    .performer-node.animating {
+      transition: left 1.1s cubic-bezier(0.4, 0, 0.2, 1), top 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .performer-ghost-node {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.75rem;
+      font-weight: 900;
+      opacity: 0.55;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      border: 2px dashed rgba(255,255,255,0.95);
+      z-index: 4;
+    }
+
+    .performer-presence-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 7px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      border: 2px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .performer-presence-chip.on-stage {
+      background: #dcfce7;
+      color: #14532d;
+      border-color: #86efac;
+    }
+
+    .performer-presence-chip.in-wings {
+      background: #f1f5f9;
+      color: #94a3b8;
+      border-color: #cbd5e1;
+      text-decoration: line-through;
+    }
+
+    /* ÉVALUATION DU CHORÉGRAPHE */
+    .eval-section {
+      background: #f0fdf4;
+      border: 2px solid #86efac;
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .eval-label {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+
+    .eval-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .level-btn {
+      padding: 10px 4px;
+      font-size: 0.85rem;
+      font-weight: 900;
+      border-radius: 10px;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+
+    .level-btn.active.lvl-1 { background: #fee2e2; border-color: #ef4444; color: #b91c1c; }
+    .level-btn.active.lvl-2 { background: #ffedd5; border-color: #f97316; color: #c2410c; }
+    .level-btn.active.lvl-3 { background: #dcfce7; border-color: #22c55e; color: #15803d; }
+    .level-btn.active.lvl-4 { background: #fef08a; border-color: #eab308; color: #854d0e; }
+
+    /* CARNET D'ARTISTE : NIVEAUX CUMULATIFS & CRITÈRES GROSSIS */
+    .artist-selector-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+
+    .artist-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 24px;
+      border: 2.5px solid var(--border);
+      background: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      color: #334155;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .artist-pill-btn.active {
+      border-color: #0d9488;
+      background: #ccfbf1;
+      color: #115e59;
+      box-shadow: 0 3px 8px rgba(13,148,136,0.25);
+    }
+
+    .criteria-chip {
+      padding: 7px 12px;
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #334155;
+      cursor: pointer;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .criteria-chip:hover {
+      border-color: #0d9488;
+      background: #e6fffa;
+    }
+
+    .criteria-chip.active {
+      background: #0d9488;
+      border-color: #0d9488;
+      color: #ffffff;
+    }
+
+    .criteria-chip.custom-chip {
+      background: #fff7ed;
+      border-color: #fdba74;
+      color: #9a3412;
+    }
+
+    .criteria-chip.custom-chip.active {
+      background: #ea580c;
+      border-color: #c2410c;
+      color: #ffffff;
+    }
+
+    .manual-acro-btn {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 900;
+      border-radius: 10px;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .manual-acro-btn.active.lvl-1 { background: #dbeafe; border-color: #3b82f6; color: #1d4ed8; }
+    .manual-acro-btn.active.lvl-2 { background: #fed7aa; border-color: #f97316; color: #c2410c; }
+    .manual-acro-btn.active.lvl-3 { background: #fef08a; border-color: #ca8a04; color: #854d0e; }
+
+    /* STYLES MODALE ET ÉLÉMENTS CARNET */
+    .class-modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.55);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .class-modal {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 20px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      border: 2px solid var(--border);
+    }
+
+    .class-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .family-section-card {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .family-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .family-section-title {
+      font-weight: 900;
+      font-size: 1.05rem;
+      color: #0f766e;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .artist-item-card {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .artist-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .artist-item-name-input {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #1e293b;
+      border: 2px dashed #94a3b8;
+      border-radius: 8px;
+      padding: 6px 10px;
+      background: #f8fafc;
+      flex: 1;
+      min-width: 150px;
+      max-width: 260px;
+    }
+
+    .artist-item-name-input:focus {
+      border-style: solid;
+      border-color: #0d9488;
+      background: #fff;
+      outline: none;
+    }
+
+    .computed-level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      border: 2px solid #cbd5e1;
+      background: #f1f5f9;
+      color: #64748b;
+    }
+    .computed-level-badge.lvl-1 { background: #dbeafe; border-color: #3b82f6; color: #1d4ed8; }
+    .computed-level-badge.lvl-2 { background: #fed7aa; border-color: #f97316; color: #c2410c; }
+    .computed-level-badge.lvl-3 { background: #fef08a; border-color: #ca8a04; color: #854d0e; }
+
+    .manual-acro-levels {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .cumulative-box {
+      background: #f0fdfa;
+      border: 1.5px solid #99f6e4;
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+
+    .cumulative-label {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #0f766e;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .criteria-chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .family-desc-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      background: #ffffff;
+      outline: none;
+    }
+    .family-desc-input:focus {
+      border-color: #0d9488;
+    }
+
+    .eval-comment-box {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #86efac;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      resize: vertical;
+      background: #fff;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .overview-card {
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .overview-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+
+    .mini-stage-box {
+      position: relative;
+      width: 100%;
+      height: 150px;
+      background: #fef9c3;
+      border: 2px solid #ca8a04;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .print-btn-bar {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; font-size: 14px; }
+      header, .top-nav-bar, #hubHomeSection, .tabs-bar, .moments-control-bar, .coulisses-toolbar, .print-btn-bar, .no-print { display: none !important; }
+      #overviewView { display: block !important; }
+      .overview-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .card { box-shadow: none; border: 1px solid #000; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- EN-TÊTE : CLASSE, GROUPE, SAUVEGARDE -->
+  <header>
+    <div class="brand-title">
+      <span style="font-size:1.8rem;">🎪</span>
+      <div>
+        <h1>Mon spectacle en Arts du cirque</h1>
+        <small>Arts du Cirque • Cycle 3 / 6ème</small>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <div class="select-pill">
+        <span>Classe :</span>
+        <select id="classSelect" onchange="switchClassFromSelect()"></select>
+        <button type="button" class="btn-class-action" onclick="openClassModal()" title="Gérer les classes">⚙️ Gérer</button>
+      </div>
+
+      <div class="select-pill">
+        <span>Groupe :</span>
+        <select id="groupSelect" onchange="switchClassGroup()">
+          <option value="1">Groupe 1</option>
+          <option value="2">Groupe 2</option>
+          <option value="3">Groupe 3</option>
+          <option value="4">Groupe 4</option>
+          <option value="5">Groupe 5</option>
+          <option value="6">Groupe 6</option>
+          <option value="7">Groupe 7</option>
+          <option value="8">Groupe 8</option>
+        </select>
+      </div>
+
+      <div class="save-indicator">
+        <span>💾</span>
+        <span id="saveStatus">Enregistré</span>
+      </div>
+
+      <!-- BOUTON D'INSTALLATION PWA ANDROID / TABLETTE -->
+      <button type="button" id="btnInstallApp" class="btn-class-action" style="display:none; background:#1e3a8a; color:#fff; padding:6px 12px; font-size:0.9rem; border-radius:10px;" onclick="triggerInstallPWA()">
+        📲 Installer sur la tablette
+      </button>
+    </div>
+  </header>
+
+  <!-- BARRE DE NAVIGATION RAPIDE (AFFICHE LE BOUTON RETOUR À L'ACCUEIL QUAND ON EST DANS UN CARNET) -->
+  <div class="top-nav-bar" id="subPageNavBar" style="display:none;">
+    <button type="button" class="btn-back-home" onclick="goToHomeHub()">
+      <span>🏠</span> Menu principal
+    </button>
+    <div style="font-weight:900; font-size:1.1rem; color:#1e3a8a;" id="currentSectionTitleLabel"></div>
+  </div>
+
+  <!-- MODAL GESTION DES CLASSES -->
+  <div class="class-modal-backdrop" id="classModalBackdrop">
+    <div class="class-modal">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-weight:900; font-size:1.15rem; color:#1e293b;">🏫 Gérer mes classes</span>
+        <button type="button" class="btn-class-action" onclick="closeClassModal()" style="font-size:1.1rem; padding:4px 10px;">✕</button>
+      </div>
+
+      <div style="font-size:0.9rem; color:#475569; margin-bottom:12px; font-weight:600;">
+        Ajoutez les noms de toutes vos classes pour retrouver facilement les groupes de chacune.
+      </div>
+
+      <div style="display:flex; gap:8px; margin-bottom:14px;">
+        <input type="text" id="newClassNameInput" placeholder="Ex: 6ème B, 6ème ULIS..." 
+          style="flex:1; padding:8px 12px; border:2px solid var(--border); border-radius:10px; font-size:0.95rem;"
+          onkeydown="if(event.key === 'Enter'){ event.preventDefault(); addNewClassFromModal(); }">
+        <button type="button" class="btn-action-small" onclick="addNewClassFromModal()">➕ Ajouter</button>
+      </div>
+
+      <div id="classListContainer" style="max-height:190px; overflow-y:auto; margin-bottom:14px;"></div>
+
+      <div style="text-align:right;">
+        <button type="button" class="btn-mini btn-neutral" style="padding:8px 16px;" onclick="closeClassModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LES ARTISTES DE LA TROUPE (ACCESSIBLE SUR TOUTES LES PAGES) -->
+  <section class="card">
+    <div class="card-title">
+      <span>👥 Les Artistes de la Troupe</span>
+      <span style="font-size:0.85rem; color:var(--text-muted); font-weight:normal;">(Inscris les prénoms de tes camarades, jusqu'à 10 élèves)</span>
+    </div>
+    
+    <div style="margin-bottom:10px;">
+      <input type="text" id="showTitleInput" placeholder="Titre du spectacle de cirque (optionnel)..." 
+        style="width:100%; padding:9px 12px; border:2px solid var(--border); border-radius:10px; font-weight:800; font-size:1rem;"
+        oninput="handleShowTitleChange()">
+    </div>
+
+    <div class="troupe-inputs-grid" id="studentInputsGrid"></div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- PAGE D'ACCUEIL : LES 3 GRANDES PASTILLES / MENUS GÉANTS  -->
+  <!-- ======================================================== -->
+  <section id="hubHomeSection" class="hub-container">
+    <div class="hub-hero">
+      <h2>🎪 Que souhaites-tu faire aujourd'hui ?</h2>
+      <p>Choisis l'un des trois carnets pour préparer et visualiser ton spectacle</p>
+    </div>
+
+    <div class="hub-menu-grid">
+      <!-- Pastille 1 : Chorégraphe -->
+      <div class="hub-big-card card-choreo" onclick="switchMainView('choreo')">
+        <div class="hub-card-icon">🎬</div>
+        <div class="hub-card-title">Mon carnet de chorégraphe</div>
+        <div class="hub-card-desc">
+          Place les artistes sur la piste, crée les déplacements par tableaux et choisis l'émotion et l'énergie du spectacle !
+        </div>
+        <div class="hub-card-action-badge">
+          <span>Ouvrir la piste</span> ➜
+        </div>
+      </div>
+
+      <!-- Pastille 2 : Artiste -->
+      <div class="hub-big-card card-artist" onclick="switchMainView('artist')">
+        <div class="hub-card-icon">🤸</div>
+        <div class="hub-card-title">Mon carnet d'artiste</div>
+        <div class="hub-card-desc">
+          Choisis ton prénom et valide tes défis en Manipulation, Équilibre et Acrobatie pour progresser du niveau 1 au niveau 3 !
+        </div>
+        <div class="hub-card-action-badge">
+          <span>Mes compétences</span> ➜
+        </div>
+      </div>
+
+      <!-- Pastille 3 : Bilan / Vue spectacle -->
+      <div class="hub-big-card card-overview" onclick="switchMainView('overview')">
+        <div class="hub-card-icon">📋</div>
+        <div class="hub-card-title">Bilan / Vue spectacle</div>
+        <div class="hub-card-desc">
+          Visualise l'ensemble du spectacle, les réussites de chaque artiste et imprime ou enregistre la fiche finale.
+        </div>
+        <div class="hub-card-action-badge">
+          <span>Voir le spectacle</span> ➜
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- ZONE 1 : MON CARNET DE CHORÉGRAPHE                       -->
+  <!-- ======================================================== -->
+  <div id="choreoSectionWrap" style="display:none;">
+    <!-- Onglets des 5 étapes narratives -->
+    <nav class="tabs-bar" id="tabsBar">
+      <button type="button" class="tab-btn active" onclick="goToStep(0)">1. Situation Initiale</button>
+      <button type="button" class="tab-btn" onclick="goToStep(1)">2. Élément Perturbateur</button>
+      <button type="button" class="tab-btn" onclick="goToStep(2)">3. Péripétie</button>
+      <button type="button" class="tab-btn" onclick="goToStep(3)">4. Résolution</button>
+      <button type="button" class="tab-btn" onclick="goToStep(4)">5. Situation Finale</button>
+    </nav>
+
+    <!-- Vue d'étape narrative -->
+    <main id="stepView">
+      <section class="card">
+        <div class="card-title" id="stepHeaderTitle">1. Situation Initiale</div>
+
+        <!-- Choix du / des chorégraphes -->
+        <div style="margin-bottom: 14px;">
+          <label style="font-size:0.95rem; font-weight:900; color:#1e293b;">
+            👑 Chorégraphe(s) responsable(s) de cette étape :
+          </label>
+          <div class="choreo-selector-wrap" id="choreoChipsWrap" style="margin-top:6px; display:flex; flex-wrap:wrap; gap:8px;"></div>
+        </div>
+
+        <!-- Émotions ciblées -->
+        <label style="font-size:0.95rem; font-weight:900; color:#1e293b;">
+          🎭 Émotion à faire ressentir au public :
+        </label>
+        <div class="chips-flow" id="emotionsContainer"></div>
+        <div class="custom-input-row">
+          <input type="text" id="newEmotionInput" placeholder="Ajouter une autre émotion..." onkeydown="handleCustomKey(event, 'emotion')">
+          <button type="button" class="btn-action-small" onclick="addCustomChip('emotion')">➕ Ajouter</button>
+        </div>
+      </section>
+
+      <!-- Plateau de scène interactif -->
+      <section class="card">
+        <div class="card-title">
+          <span>📍 Placements & Déplacements sur la piste</span>
+        </div>
+
+        <div class="moments-control-bar">
+          <span style="font-size:0.85rem; font-weight:900; color:#1e293b;">Tableaux :</span>
+          <div id="momentsPillsGroup" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+          <button type="button" class="btn-mini btn-accent" onclick="addNewMoment()" title="Ajouter un nouveau tableau de déplacement">➕ Nouveau tableau</button>
+          <button type="button" class="btn-mini btn-danger" onclick="deleteCurrentMoment()" title="Supprimer ce tableau">🗑️</button>
+          <button type="button" class="btn-mini btn-accent" id="playBtn" onclick="togglePlayAnimation()" style="margin-left:auto; background:#ea580c;">▶ Animer / Lecture</button>
+        </div>
+
+        <div style="margin-bottom: 8px;">
+          <input type="text" id="momentNoteInput" placeholder="Action motrice de ce tableau (ex: Entrée en roulade, Pyramide à 3, Saut groupé...)" 
+            style="width:100%; padding:8px 12px; border:2px solid var(--border); border-radius:10px; font-size:0.9rem;"
+            oninput="handleMomentNoteChange()">
+        </div>
+
+        <div class="stage-canvas-box" id="stageCanvas">
+          <div class="stage-header-label">▲ FOND DE SCÈNE ▲</div>
+          <div class="stage-wings left">COULISSES</div>
+          <div class="stage-wings right">COULISSES</div>
+          
+          <svg class="stage-svg-overlay" id="stageSvg">
+            <defs>
+              <marker id="arrowHead" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                <path d="M 0 0 L 8 4 L 0 8 z" fill="#b45309" />
+              </marker>
+            </defs>
+            <g id="svgTrajectoryGroup"></g>
+          </svg>
+
+          <div id="ghostLayer"></div>
+          <div id="tokensLayer"></div>
+          <div class="stage-audience-bar">▼ LE PUBLIC EST ICI (FACE) ▼</div>
+
+          <div id="animNotice" style="display:none; position:absolute; top:28px; left:50%; transform:translateX(-50%); background:#ea580c; color:#fff; font-size:0.9rem; font-weight:800; padding:8px 18px; border-radius:999px; box-shadow:0 3px 8px rgba(0,0,0,0.3); z-index:15; pointer-events:none; text-align:center;"></div>
+        </div>
+
+        <!-- Coulisses et présences -->
+        <div class="coulisses-toolbar" style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; background:#f8fafc; border:2px solid var(--border); border-radius:12px; padding:10px 12px; margin-top:10px;">
+          <div class="coulisses-label" style="font-size:0.9rem; font-weight:800; color:#334155; display:flex; align-items:center; gap:6px;">
+            <span>🚪 Présence sur scène :</span>
+            <span style="font-weight:normal; font-size:0.8rem; color:#64748b;">(Clique pour placer en scène ou en coulisses)</span>
+          </div>
+          <div id="coulissesChipsContainer" style="display:flex; flex-wrap:wrap; gap:6px; margin-left:auto;"></div>
+        </div>
+      </section>
+
+      <!-- Paramètres du mouvement : Espace, Temps, Énergie, Procédés -->
+      <section class="card">
+        <!-- Espace -->
+        <div style="margin-bottom: 14px;">
+          <label style="font-size:0.95rem; font-weight:900; color:#1e293b;">
+            📐 Utilisation de l'espace :
+          </label>
+          <div class="chips-flow" id="spaceContainer"></div>
+          <div class="custom-input-row">
+            <input type="text" id="newSpaceInput" placeholder="Ajouter une autre notion d'espace..." onkeydown="handleCustomKey(event, 'space')">
+            <button type="button" class="btn-action-small" onclick="addCustomChip('space')">➕ Ajouter</button>
+          </div>
+        </div>
+
+        <!-- Temps -->
+        <div style="margin-bottom: 14px;">
+          <label style="font-size:0.95rem; font-weight:900; color:#1e293b;">
+            ⏱️ Utilisation du temps :
+          </label>
+          <div class="chips-flow" id="timeContainer"></div>
+          <div class="custom-input-row">
+            <input type="text" id="newTimeInput" placeholder="Ajouter une autre notion de temps..." onkeydown="handleCustomKey(event, 'time')">
+            <button type="button" class="btn-action-small" onclick="addCustomChip('time')">➕ Ajouter</button>
+          </div>
+        </div>
+
+        <!-- Évaluation et conseils -->
+        <div class="eval-section">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+            <div style="font-size:1.05rem; font-weight:900; color:#166534; display:flex; align-items:center; gap:6px;">
+              <span>🎯 Évaluation et conseils</span>
+            </div>
+            <div style="font-size:0.85rem; font-weight:800; color:#14532d; background:#bbf7d0; padding:4px 10px; border-radius:8px;" id="evalChoreoTargetLabel">👑 Chorégraphe(s) : Aucun</div>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <div class="eval-label">Évaluation du chorégraphe pour cette étape :</div>
+            <div class="eval-grid-4">
+              <button type="button" class="level-btn lvl-1" id="evalChoreo-1" onclick="setMasteryLevel('1')">🔴 Insuffisant</button>
+              <button type="button" class="level-btn lvl-2" id="evalChoreo-2" onclick="setMasteryLevel('2')">🟠 Fragile</button>
+              <button type="button" class="level-btn lvl-3" id="evalChoreo-3" onclick="setMasteryLevel('3')">🟢 Satisfaisant</button>
+              <button type="button" class="level-btn lvl-4" id="evalChoreo-4" onclick="setMasteryLevel('4')">⭐ Très bien</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="eval-label">💬 Conseils personnalisés :</div>
+            <textarea class="eval-comment-box" id="stepProfNote" rows="2" placeholder="Notez ici vos conseils ou le point à travailler pour le chorégraphe..." oninput="handleStepProfNoteChange()"></textarea>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- ZONE 2 : MON CARNET D'ARTISTE                            -->
+  <!-- ======================================================== -->
+  <section class="card" id="artistSectionWrap" style="display:none;">
+    <div class="card-title" style="justify-content:space-between;">
+      <span>🤸 Mon carnet d'artiste — Profil & Compétences</span>
+      <span style="font-size:0.85rem; color:#0d9488; font-weight:800;">Défis par cumul & fiches de figures</span>
+    </div>
+
+    <!-- Choix du prénom dans la troupe -->
+    <div style="margin-bottom:12px;">
+      <label style="font-size:0.95rem; font-weight:900; color:#1e293b;">
+        👤 Choisis ton prénom dans la troupe :
+      </label>
+      <div class="artist-selector-row" id="artistPillsRow" style="margin-top:8px;"></div>
+    </div>
+
+    <!-- Contenu spécifique de l'artiste sélectionné -->
+    <div id="activeArtistContent" style="display:none;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px; background:#f0fdfa; padding:10px 14px; border-radius:12px; border:2px solid #ccfbf1;">
+        <div id="activeArtistBadgeDot" style="width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900; font-size:0.95rem;"></div>
+        <div>
+          <span style="font-weight:900; font-size:1.1rem; color:#115e59;" id="activeArtistNameHeader"></span>
+          <span style="font-size:0.85rem; color:#0d9488; margin-left:8px; font-weight:700;">— Choisis tes difficultés ou inscris ta figure</span>
+        </div>
+      </div>
+
+      <!-- Famille 1 : Manipulation (Par accumulation de difficultés) -->
+      <div class="family-section-card">
+        <div class="family-section-header">
+          <div class="family-section-title">
+            <span>🤹 Manipulation</span>
+            <span style="font-size:0.85rem; font-weight:normal; color:#64748b;">(balles, foulards, massues, diabolos, assiettes...) — <em>Cumule des difficultés pour monter de niveau !</em></span>
+          </div>
+          <button type="button" class="btn-mini btn-accent" style="background:#0d9488;" onclick="addArtistItem('manipulation')">➕ Ajouter un élément</button>
+        </div>
+        <div id="itemsContainer-manipulation"></div>
+      </div>
+
+      <!-- Famille 2 : Équilibre (Par accumulation de difficultés) -->
+      <div class="family-section-card">
+        <div class="family-section-header">
+          <div class="family-section-title">
+            <span>🪜 Équilibre</span>
+            <span style="font-size:0.85rem; font-weight:normal; color:#64748b;">(fil, rolla-bolla, pédalgo, poutre, boule...) — <em>Cumule des difficultés pour monter de niveau !</em></span>
+          </div>
+          <button type="button" class="btn-mini btn-accent" style="background:#0d9488;" onclick="addArtistItem('equilibre')">➕ Ajouter un élément</button>
+        </div>
+        <div id="itemsContainer-equilibre"></div>
+      </div>
+
+      <!-- Famille 3 : Acrobatie (Fiches de difficulté Niveau 1 2 3 + description) -->
+      <div class="family-section-card">
+        <div class="family-section-header">
+          <div class="family-section-title">
+            <span>🤸 Acrobatie</span>
+            <span style="font-size:0.85rem; font-weight:normal; color:#64748b;">(roulades, roues, sauts, pyramides...) — <em>Choisis le niveau correspondant à ta fiche de figure</em></span>
+          </div>
+          <button type="button" class="btn-mini btn-accent" style="background:#0d9488;" onclick="addArtistItem('acrobatie')">➕ Ajouter un élément</button>
+        </div>
+        <div id="itemsContainer-acrobatie"></div>
+      </div>
+
+      <!-- Évaluation et conseils individuels de l'artiste -->
+      <div class="eval-section" style="background:#f0fdfa; border-color:#5eead4; margin-top:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+          <div style="font-size:1.05rem; font-weight:900; color:#0f766e; display:flex; align-items:center; gap:6px;">
+            <span>🎯 Évaluation et conseils pour l'artiste</span>
+          </div>
+          <div style="font-size:0.9rem; font-weight:800; color:#115e59; background:#ccfbf1; padding:4px 12px; border-radius:8px;" id="evalArtistTargetLabel">🤸 Artiste : Aucun</div>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <div class="eval-label">Évaluation des compétences de l'artiste :</div>
+          <div class="eval-grid-4">
+            <button type="button" class="level-btn lvl-1" id="evalArtist-1" onclick="setArtistMasteryLevel('1')">🔴 Insuffisant</button>
+            <button type="button" class="level-btn lvl-2" id="evalArtist-2" onclick="setArtistMasteryLevel('2')">🟠 Fragile</button>
+            <button type="button" class="level-btn lvl-3" id="evalArtist-3" onclick="setArtistMasteryLevel('3')">🟢 Satisfaisant</button>
+            <button type="button" class="level-btn lvl-4" id="evalArtist-4" onclick="setArtistMasteryLevel('4')">⭐ Très bien</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="eval-label">💬 Conseils personnalisés pour progresser :</div>
+          <textarea class="eval-comment-box" id="artistProfNote" rows="2" style="border-color:#5eead4;" placeholder="Notez ici les conseils ou points d'appui pour cet artiste..." oninput="handleArtistProfNoteChange()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div id="noArtistSelectedNotice" style="padding:22px; text-align:center; color:#64748b; font-style:italic; font-size:1rem; font-weight:600;">
+      Inscris d'abord les prénoms de tes camarades dans « Les Artistes de la Troupe » ci-dessus, puis clique sur ton prénom pour compléter ton carnet d'artiste.
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- ZONE 3 : BILAN / VUE SPECTACLE                           -->
+  <!-- ======================================================== -->
+  <section class="card" id="overviewView" style="display:none;">
+    <div class="card-title" style="justify-content:space-between;">
+      <span>📋 Vue d'Ensemble du Spectacle & Bilan Enseignant</span>
+      <span style="font-size:0.9rem; font-weight:800; color:#1d4ed8;" id="overviewGroupLabel"></span>
+    </div>
+
+    <div style="margin-bottom:16px; background:#f0fdfa; border:2px solid #99f6e4; border-radius:14px; padding:12px;">
+      <div style="font-weight:900; font-size:0.95rem; color:#0f766e; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+        <span>🤸 Profils de la troupe (Carnet d'artiste) :</span>
+      </div>
+      <div id="overviewArtistsProfiles" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:10px;"></div>
+    </div>
+
+    <div class="overview-grid" id="overviewCardsGrid"></div>
+
+    <div class="print-btn-bar no-print">
+      <button type="button" class="btn-mini btn-accent" style="padding:10px 16px; font-size:0.95rem;" onclick="window.print()">🖨️ Imprimer la fiche spectacle</button>
+      <button type="button" class="btn-mini btn-neutral" style="padding:10px 16px; font-size:0.95rem;" onclick="exportDataJSON()">💾 Sauvegarder (Export JSON)</button>
+      <button type="button" class="btn-mini btn-neutral" style="padding:10px 16px; font-size:0.95rem;" onclick="triggerImportJSON()">📂 Importer des données</button>
+      <input type="file" id="importFileInput" style="display:none;" accept=".json" onchange="importDataJSON(event)">
+    </div>
+  </section>
+
+  <script>
+    const PERFORMER_COLORS = [
+      "#ef4444", "#3b82f6", "#10b981", "#f59e0b", "#8b5cf6",
+      "#ec4899", "#06b6d4", "#84cc16", "#6366f1", "#14b8a6"
+    ];
+
+    const NARRATIVE_STEPS = [
+      { id: 0, title: "1. Situation Initiale", desc: "Présentation des artistes et du monde du spectacle" },
+      { id: 1, title: "2. Élément Perturbateur", desc: "Un événement imprévu vient bousculer la piste" },
+      { id: 2, title: "3. Péripétie", desc: "L'épreuve majeure, la tension monte" },
+      { id: 3, title: "4. Résolution", desc: "La réponse trouvée pour rétablir l'harmonie" },
+      { id: 4, title: "5. Situation Finale", desc: "Le tableau d'apothéose et le salut au public" }
+    ];
+
+    const DEFAULT_EMOTIONS = ["Joie", "Peur", "Tristesse", "Colère"];
+    const DEFAULT_SPACE = ["Petit", "Grand", "Se rapprocher", "S'éloigner", "Isolé", "Ensemble"];
+    const DEFAULT_TIME = ["Vite", "Lent", "Arrêt", "Long", "Court"];
+    const DEFAULT_ENERGY = ["Lourd", "Léger", "Fluide", "Saccadé"];
+    const DEFAULT_PROCEDURES = ["Unisson", "Répétition", "Canon", "Contraste", "Cascade", "Miroir"];
+
+    /* BANQUE DE DIFFICULTÉS CUMULATIVES POUR LA MANIPULATION ET L'ÉQUILIBRE */
+    const CUMULATIVE_CRITERIA = {
+      manipulation: [
+        { id: "obj_plus_1", label: "+ 1 objet" },
+        { id: "obj_plus_2", label: "+ 1 objet" },
+        { id: "deplacer", label: "Se déplacer" },
+        { id: "sous_jambe", label: "Sous la jambe" },
+        { id: "sauter", label: "Sauter" },
+        { id: "lancer_haut", label: "Lancer haut" },
+        { id: "demi_tour", label: "Demi-tour sur soi" },
+        { id: "dans_dos", label: "Lancer dans le dos" },
+        { id: "echange_deux", label: "Échange à deux" },
+        { id: "assis_tailleur", label: "Assis / En tailleur" }
+      ],
+      equilibre: [
+        { id: "avancer", label: "Avancer" },
+        { id: "reculer", label: "Reculer" },
+        { id: "demi_tour_eq", label: "Faire un demi-tour" },
+        { id: "accroupir", label: "S'accroupir" },
+        { id: "lacher_mains", label: "Lâcher les mains" },
+        { id: "tenue_5s", label: "Tenir plus de 5 sec" },
+        { id: "jongler_dessus", label: "Jongler / manipuler dessus" },
+        { id: "un_pied", label: "Sur 1 pied" },
+        { id: "obstacle", label: "Passer un obstacle" },
+        { id: "autonome", label: "Autonome (sans parade)" }
+      ]
+    };
+
+    const CLASSES_STORAGE_KEY = "cirque_eps_classes_list";
+    let classesList = ["6ème A", "6ème B", "6ème C", "6ème D"];
+    let currentClassName = "6ème A";
+    let currentGroup = "1";
+    let activeStepIdx = 0;
+    let activeMomentIdx = 0;
+    let isPlayingAnimation = false;
+    let animationTimer = null;
+    let currentMainView = "hub"; // Vue par défaut : Accueil Menu Principal
+    let activeArtistStudentIdx = null;
+
+    /* GESTION DES CLASSES */
+    function loadClassesList() {
+      const raw = localStorage.getItem(CLASSES_STORAGE_KEY);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            classesList = parsed;
+          }
+        } catch(e){}
+      }
+      if (!classesList.includes(currentClassName)) {
+        currentClassName = classesList[0] || "6ème A";
+      }
+      renderClassSelect();
+    }
+
+    function saveClassesList() {
+      localStorage.setItem(CLASSES_STORAGE_KEY, JSON.stringify(classesList));
+    }
+
+    function renderClassSelect() {
+      const select = document.getElementById("classSelect");
+      if (!select) return;
+      select.innerHTML = "";
+      classesList.forEach(cls => {
+        const opt = document.createElement("option");
+        opt.value = cls;
+        opt.textContent = cls;
+        if (cls === currentClassName) opt.selected = true;
+        select.appendChild(opt);
+      });
+    }
+
+    function switchClassFromSelect() {
+      const select = document.getElementById("classSelect");
+      currentClassName = select.value;
+      loadGroupData();
+    }
+
+    function openClassModal() {
+      renderClassListModal();
+      const modal = document.getElementById("classModalBackdrop");
+      if (modal) modal.style.display = "flex";
+      const input = document.getElementById("newClassNameInput");
+      if (input) {
+        input.value = "";
+        setTimeout(() => input.focus(), 50);
+      }
+    }
+
+    function closeClassModal() {
+      const modal = document.getElementById("classModalBackdrop");
+      if (modal) modal.style.display = "none";
+    }
+
+    function renderClassListModal() {
+      const container = document.getElementById("classListContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      classesList.forEach((cls, idx) => {
+        const row = document.createElement("div");
+        row.className = "class-list-item";
+        const isCurrent = (cls === currentClassName);
+
+        row.innerHTML = `
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span>${escapeHtml(cls)}</span>
+            ${isCurrent ? `<span style="font-size:0.7rem; background:#dbeafe; color:#1d4ed8; padding:2px 6px; border-radius:4px;">Actuelle</span>` : ""}
+          </div>
+          <div style="display:flex; gap:4px;">
+            <button type="button" class="btn-class-action" style="color:#ef4444;" title="Supprimer" onclick="deleteClassItem(${idx})">🗑️</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function addNewClassFromModal() {
+      const input = document.getElementById("newClassNameInput");
+      if (!input) return;
+      const name = input.value.trim();
+      if (!name) return;
+
+      if (!classesList.includes(name)) {
+        classesList.push(name);
+        saveClassesList();
+        currentClassName = name;
+        renderClassSelect();
+        renderClassListModal();
+        loadGroupData();
+      }
+      input.value = "";
+    }
+
+    function deleteClassItem(idx) {
+      if (classesList.length <= 1) {
+        showAnimationNotice("Vous devez conserver au moins une classe.");
+        return;
+      }
+      const deletedName = classesList[idx];
+      classesList.splice(idx, 1);
+      saveClassesList();
+
+      if (currentClassName === deletedName) {
+        currentClassName = classesList[0];
+        loadGroupData();
+      }
+      renderClassSelect();
+      renderClassListModal();
+    }
+
+    function sanitizeKeyPart(str) {
+      return (str || "classe").trim().replace(/[^a-zA-Z0-9_-]/g, "_");
+    }
+
+    function getStorageKey(cls, grp) {
+      return `cirque_eps_${sanitizeKeyPart(cls)}_${grp}`;
+    }
+
+    /* STRUCTURE DES DONNÉES */
+    function createDefaultPlacements() {
+      const placements = {};
+      for (let i = 0; i < 10; i++) {
+        const col = i % 5;
+        const row = Math.floor(i / 5);
+        placements[i] = {
+          x: Math.round(15 + col * 17.5),
+          y: Math.round(25 + row * 30)
+        };
+      }
+      return placements;
+    }
+
+    function createDefaultArtistProfiles() {
+      const profiles = {};
+      for (let i = 0; i < 10; i++) {
+        profiles[i] = {
+          evalArtist: "",
+          profNote: "",
+          manipulation: [
+            { title: "Balles", selectedCriteria: [], customCriteria: [], desc: "" }
+          ],
+          equilibre: [
+            { title: "Rolla-bolla", selectedCriteria: [], customCriteria: [], desc: "" }
+          ],
+          acrobatie: [
+            { title: "Figure au sol", manualLevel: 0, desc: "" }
+          ]
+        };
+      }
+      return profiles;
+    }
+
+    function createEmptyGroupData() {
+      return {
+        showTitle: "",
+        students: Array(10).fill(""),
+        customEmotions: [],
+        customSpace: [],
+        customTime: [],
+        customEnergy: [],
+        customProcedures: [],
+        artistProfiles: createDefaultArtistProfiles(),
+        steps: NARRATIVE_STEPS.map(() => ({
+          choreographers: [],
+          emotions: [],
+          space: [],
+          time: [],
+          energy: [],
+          procedures: [],
+          evalChoreo: "",
+          profNote: "",
+          moments: [
+            {
+              label: "Tableau 1",
+              actionNote: "",
+              positions: createDefaultPlacements(),
+              backstage: []
+            }
+          ]
+        }))
+      };
+    }
+
+    let activeData = createEmptyGroupData();
+
+    function loadGroupData() {
+      stopAnimation();
+      const key = getStorageKey(currentClassName, currentGroup);
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        try {
+          activeData = JSON.parse(raw);
+          if (!activeData.steps || activeData.steps.length < 5) {
+            activeData = createEmptyGroupData();
+          } else {
+            if (!Array.isArray(activeData.students)) activeData.students = Array(10).fill("");
+            while (activeData.students.length < 10) activeData.students.push("");
+            if (!Array.isArray(activeData.customEmotions)) activeData.customEmotions = [];
+            if (!Array.isArray(activeData.customSpace)) activeData.customSpace = [];
+            if (!Array.isArray(activeData.customTime)) activeData.customTime = [];
+            if (!Array.isArray(activeData.customEnergy)) activeData.customEnergy = [];
+            if (!Array.isArray(activeData.customProcedures)) activeData.customProcedures = [];
+            if (!activeData.artistProfiles) activeData.artistProfiles = createDefaultArtistProfiles();
+            
+            // Migration robuste vers le format cumulatif (manip/équilibre) et manuel (acro)
+            for (let i = 0; i < 10; i++) {
+              if (!activeData.artistProfiles[i]) {
+                activeData.artistProfiles[i] = {
+                  evalArtist: "",
+                  profNote: "",
+                  manipulation: [{ title: "Balles", selectedCriteria: [], customCriteria: [], desc: "" }],
+                  equilibre: [{ title: "Rolla-bolla", selectedCriteria: [], customCriteria: [], desc: "" }],
+                  acrobatie: [{ title: "Figure au sol", manualLevel: 0, desc: "" }]
+                };
+              } else {
+                if (activeData.artistProfiles[i].evalArtist === undefined) activeData.artistProfiles[i].evalArtist = "";
+                if (activeData.artistProfiles[i].profNote === undefined) activeData.artistProfiles[i].profNote = "";
+
+                ["manipulation", "equilibre"].forEach(fam => {
+                  if (!Array.isArray(activeData.artistProfiles[i][fam]) || activeData.artistProfiles[i][fam].length === 0) {
+                    activeData.artistProfiles[i][fam] = [
+                      { title: (fam === "manipulation" ? "Balles" : "Rolla-bolla"), selectedCriteria: [], customCriteria: [], desc: "" }
+                    ];
+                  } else {
+                    activeData.artistProfiles[i][fam].forEach(item => {
+                      if (!Array.isArray(item.selectedCriteria)) item.selectedCriteria = [];
+                      if (!Array.isArray(item.customCriteria)) item.customCriteria = [];
+                      if (item.desc === undefined) item.desc = "";
+
+                      // Migration des anciens libellés vers les IDs/labels si nécessaire
+                      if (fam === "manipulation") {
+                        const converted = [];
+                        item.selectedCriteria.forEach(c => {
+                          if (c === "2 objets") {
+                            if (!converted.includes("obj_plus_1")) converted.push("obj_plus_1");
+                          } else if (c === "3 objets ou +") {
+                            if (!converted.includes("obj_plus_1")) converted.push("obj_plus_1");
+                            if (!converted.includes("obj_plus_2")) converted.push("obj_plus_2");
+                          } else {
+                            converted.push(c);
+                          }
+                        });
+                        item.selectedCriteria = converted;
+                      }
+                    });
+                  }
+                });
+
+                if (!Array.isArray(activeData.artistProfiles[i].acrobatie) || activeData.artistProfiles[i].acrobatie.length === 0) {
+                  activeData.artistProfiles[i].acrobatie = [
+                    { title: "Figure au sol", manualLevel: 0, desc: "" }
+                  ];
+                } else {
+                  activeData.artistProfiles[i].acrobatie.forEach(item => {
+                    if (item.manualLevel === undefined) {
+                      item.manualLevel = item.level || 0;
+                    }
+                    if (item.desc === undefined) item.desc = "";
+                  });
+                }
+              }
+            }
+
+            activeData.steps.forEach(step => {
+              if (!Array.isArray(step.choreographers)) {
+                step.choreographers = step.choreographer ? [step.choreographer] : [];
+                delete step.choreographer;
+              }
+              if (!Array.isArray(step.emotions)) step.emotions = [];
+              if (!Array.isArray(step.space)) step.space = [];
+              if (!Array.isArray(step.time)) step.time = [];
+              if (!Array.isArray(step.energy)) step.energy = [];
+              if (!Array.isArray(step.procedures)) step.procedures = [];
+              if (step.evalChoreo === undefined) step.evalChoreo = "";
+              if (step.profNote === undefined) step.profNote = "";
+              if (!step.moments || step.moments.length === 0) {
+                step.moments = [
+                  { label: "Tableau 1", actionNote: "", positions: createDefaultPlacements(), backstage: [] }
+                ];
+              } else {
+                step.moments.forEach(m => {
+                  if (!Array.isArray(m.backstage)) m.backstage = [];
+                  if (!m.positions) m.positions = createDefaultPlacements();
+                });
+              }
+            });
+          }
+        } catch (e) {
+          activeData = createEmptyGroupData();
+        }
+      } else {
+        activeData = createEmptyGroupData();
+      }
+
+      activeMomentIdx = 0;
+      renderAllViews();
+    }
+
+    function saveCurrentData() {
+      const key = getStorageKey(currentClassName, currentGroup);
+      localStorage.setItem(key, JSON.stringify(activeData));
+      const statusEl = document.getElementById("saveStatus");
+      if (statusEl) {
+        statusEl.textContent = "Enregistré";
+        statusEl.style.color = "var(--success)";
+      }
+    }
+
+    /* BASCULE ENTRE LE MENU PRINCIPAL ET LES TROIS GRANDES VUES */
+    function goToHomeHub() {
+      stopAnimation();
+      currentMainView = "hub";
+
+      const hub = document.getElementById("hubHomeSection");
+      const choreoWrap = document.getElementById("choreoSectionWrap");
+      const artistWrap = document.getElementById("artistSectionWrap");
+      const overviewWrap = document.getElementById("overviewView");
+      const subNavBar = document.getElementById("subPageNavBar");
+
+      if (hub) hub.style.display = "block";
+      if (choreoWrap) choreoWrap.style.display = "none";
+      if (artistWrap) artistWrap.style.display = "none";
+      if (overviewWrap) overviewWrap.style.display = "none";
+      if (subNavBar) subNavBar.style.display = "none";
+    }
+
+    function switchMainView(view) {
+      stopAnimation();
+      currentMainView = view;
+      const hub = document.getElementById("hubHomeSection");
+      const choreoWrap = document.getElementById("choreoSectionWrap");
+      const artistWrap = document.getElementById("artistSectionWrap");
+      const overviewWrap = document.getElementById("overviewView");
+      const subNavBar = document.getElementById("subPageNavBar");
+      const titleLabel = document.getElementById("currentSectionTitleLabel");
+
+      if (hub) hub.style.display = "none";
+      if (choreoWrap) choreoWrap.style.display = "none";
+      if (artistWrap) artistWrap.style.display = "none";
+      if (overviewWrap) overviewWrap.style.display = "none";
+      if (subNavBar) subNavBar.style.display = "flex";
+
+      if (view === "choreo") {
+        if (titleLabel) titleLabel.innerHTML = "🎬 Mon carnet de chorégraphe";
+        if (choreoWrap) choreoWrap.style.display = "block";
+        const stepView = document.getElementById("stepView");
+        if (stepView) stepView.style.display = "block";
+        renderStepView();
+      } else if (view === "artist") {
+        if (titleLabel) titleLabel.innerHTML = "🤸 Mon carnet d'artiste";
+        if (artistWrap) artistWrap.style.display = "block";
+        renderArtistNotebookView();
+      } else if (view === "overview") {
+        if (titleLabel) titleLabel.innerHTML = "📋 Bilan / Vue spectacle";
+        if (overviewWrap) overviewWrap.style.display = "block";
+        renderOverview();
+      } else {
+        goToHomeHub();
+      }
+    }
+
+    function renderAllViews() {
+      renderStudentInputs();
+      if (currentMainView === "artist") {
+        renderArtistNotebookView();
+      } else if (currentMainView === "overview") {
+        renderOverview();
+      } else if (currentMainView === "choreo") {
+        renderStepView();
+      }
+    }
+
+    /* GESTION DE LA TROUPE (10 ARTISTES) */
+    function renderStudentInputs() {
+      const container = document.getElementById("studentInputsGrid");
+      const titleInput = document.getElementById("showTitleInput");
+      if (titleInput) titleInput.value = activeData.showTitle || "";
+      if (!container) return;
+
+      container.innerHTML = "";
+      for (let i = 0; i < 10; i++) {
+        const val = activeData.students[i] || "";
+        const box = document.createElement("div");
+        box.className = "student-badge-input";
+        box.innerHTML = `
+          <div class="student-dot" style="background:${PERFORMER_COLORS[i]};">${i + 1}</div>
+          <input type="text" placeholder="Artiste ${i + 1}..." value="${escapeHtml(val)}" oninput="handleStudentNameChange(${i}, this.value)">
+        `;
+        container.appendChild(box);
+      }
+    }
+
+    function handleStudentNameChange(idx, val) {
+      activeData.students[idx] = val.trim();
+      saveCurrentData();
+      renderChoreoChips();
+      renderStageElements();
+      if (currentMainView === "artist") {
+        renderArtistNotebookView();
+      }
+    }
+
+    function handleShowTitleChange() {
+      const titleInput = document.getElementById("showTitleInput");
+      if (titleInput) {
+        activeData.showTitle = titleInput.value;
+        saveCurrentData();
+      }
+    }
+
+    function getValidStudents() {
+      const list = [];
+      activeData.students.forEach((name, idx) => {
+        if (name && name.trim().length > 0) {
+          list.push({ index: idx, name: name.trim(), color: PERFORMER_COLORS[idx] });
+        }
+      });
+      return list;
+    }
+
+    /* ======================================================== */
+    /* CARNET D'ARTISTE : NIVEAUX CUMULATIFS & FICHES ACROBATIE  */
+    /* ======================================================== */
+    function calculateCumulativeLevel(count) {
+      if (count <= 0) return 0;
+      if (count === 1) return 1;
+      if (count === 2) return 2;
+      return 3; // 3 ou plus
+    }
+
+    function renderArtistNotebookView() {
+      const pillsRow = document.getElementById("artistPillsRow");
+      const activeContent = document.getElementById("activeArtistContent");
+      const notice = document.getElementById("noArtistSelectedNotice");
+      const valid = getValidStudents();
+
+      if (!pillsRow || !activeContent || !notice) return;
+      pillsRow.innerHTML = "";
+
+      if (valid.length === 0) {
+        notice.style.display = "block";
+        activeContent.style.display = "none";
+        activeArtistStudentIdx = null;
+        return;
+      }
+
+      notice.style.display = "none";
+
+      if (activeArtistStudentIdx === null || !valid.some(s => s.index === activeArtistStudentIdx)) {
+        activeArtistStudentIdx = valid[0].index;
+      }
+
+      valid.forEach(st => {
+        const isSel = (st.index === activeArtistStudentIdx);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "artist-pill-btn" + (isSel ? " active" : "");
+        btn.innerHTML = `
+          <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:${st.color};"></span>
+          <span>${escapeHtml(st.name)}</span>
+        `;
+        btn.onclick = () => {
+          activeArtistStudentIdx = st.index;
+          renderArtistNotebookView();
+        };
+        pillsRow.appendChild(btn);
+      });
+
+      renderActiveArtistDetails();
+    }
+
+    function renderActiveArtistDetails() {
+      const activeContent = document.getElementById("activeArtistContent");
+      if (!activeContent) return;
+      if (activeArtistStudentIdx === null) {
+        activeContent.style.display = "none";
+        return;
+      }
+
+      activeContent.style.display = "block";
+      const studentName = activeData.students[activeArtistStudentIdx] || `Artiste ${activeArtistStudentIdx + 1}`;
+      const studentColor = PERFORMER_COLORS[activeArtistStudentIdx];
+
+      const headerName = document.getElementById("activeArtistNameHeader");
+      const badgeDot = document.getElementById("activeArtistBadgeDot");
+      if (headerName) headerName.textContent = studentName;
+      if (badgeDot) {
+        badgeDot.style.backgroundColor = studentColor;
+        badgeDot.textContent = activeArtistStudentIdx + 1;
+      }
+
+      if (!activeData.artistProfiles) activeData.artistProfiles = createDefaultArtistProfiles();
+      if (!activeData.artistProfiles[activeArtistStudentIdx]) {
+        activeData.artistProfiles[activeArtistStudentIdx] = {
+          manipulation: [{ title: "Balles", selectedCriteria: [], customCriteria: [], desc: "" }],
+          equilibre: [{ title: "Rolla-bolla", selectedCriteria: [], customCriteria: [], desc: "" }],
+          acrobatie: [{ title: "Figure au sol", manualLevel: 0, desc: "" }]
+        };
+      }
+
+      const profile = activeData.artistProfiles[activeArtistStudentIdx];
+      renderCumulativeFamilyItems("manipulation", profile.manipulation || []);
+      renderCumulativeFamilyItems("equilibre", profile.equilibre || []);
+      renderAcrobatieItems(profile.acrobatie || []);
+      renderArtistEvaluation();
+    }
+
+    /* Rendu Manipulation et Équilibre (PAR CUMUL DE DIFFICULTÉS) */
+    function renderCumulativeFamilyItems(family, items) {
+      const container = document.getElementById(`itemsContainer-${family}`);
+      if (!container) return;
+      container.innerHTML = "";
+
+      const defaultCriteriaList = CUMULATIVE_CRITERIA[family] || [];
+
+      items.forEach((item, itemIdx) => {
+        const card = document.createElement("div");
+        card.className = "artist-item-card";
+
+        const selectedCount = (item.selectedCriteria || []).length;
+        const level = calculateCumulativeLevel(selectedCount);
+
+        let lvlBadgeText = "Niveau non défini (0 difficulté)";
+        let lvlClass = "";
+        if (level === 1) {
+          lvlBadgeText = "🔵 Niveau 1 (1 difficulté)";
+          lvlClass = "lvl-1";
+        } else if (level === 2) {
+          lvlBadgeText = "🟠 Niveau 2 (2 difficultés combinées)";
+          lvlClass = "lvl-2";
+        } else if (level === 3) {
+          lvlBadgeText = `⭐ Niveau 3 (${selectedCount} difficultés combinées)`;
+          lvlClass = "lvl-3";
+        }
+
+        const deleteBtnHtml = (items.length > 1) 
+          ? `<button type="button" class="btn-class-action" style="color:#ef4444; padding:4px 8px;" title="Supprimer cet élément" onclick="deleteArtistItem('${family}', ${itemIdx})">🗑️</button>` 
+          : "";
+
+        // Génération des pastilles par défaut
+        let defaultChipsHtml = defaultCriteriaList.map(critObj => {
+          const critKey = critObj.id || critObj.label;
+          const critLabel = critObj.label;
+          const isSelected = (item.selectedCriteria || []).includes(critKey) || (item.selectedCriteria || []).includes(critLabel);
+          return `
+            <button type="button" class="criteria-chip ${isSelected ? 'active' : ''}" 
+              onclick="toggleCumulativeCriterion('${family}', ${itemIdx}, '${escapeHtml(critKey)}')">
+              <span>${isSelected ? '✓ ' : '+ '}</span>
+              <span>${escapeHtml(critLabel)}</span>
+            </button>
+          `;
+        }).join("");
+
+        // Génération des pastilles personnalisées
+        let customChipsHtml = (item.customCriteria || []).map(customCrit => {
+          const isSelected = (item.selectedCriteria || []).includes(customCrit);
+          return `
+            <button type="button" class="criteria-chip custom-chip ${isSelected ? 'active' : ''}" 
+              onclick="toggleCumulativeCriterion('${family}', ${itemIdx}, '${escapeHtml(customCrit)}')">
+              <span>${isSelected ? '✓ ' : '✨ '}</span>
+              <span>${escapeHtml(customCrit)}</span>
+              <span class="chip-delete-btn" title="Supprimer cette contrainte" onclick="event.stopPropagation(); deleteCustomCriterion('${family}', ${itemIdx}, '${escapeHtml(customCrit)}')">×</span>
+            </button>
+          `;
+        }).join("");
+
+        card.innerHTML = `
+          <div class="artist-item-top">
+            <input type="text" class="artist-item-name-input" value="${escapeHtml(item.title || (family === 'manipulation' ? 'Balles' : 'Rolla-bolla'))}" 
+              placeholder="Objet / figure..." 
+              oninput="handleArtistItemTitleChange('${family}', ${itemIdx}, this.value)">
+
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="computed-level-badge ${lvlClass}">${lvlBadgeText}</span>
+              ${deleteBtnHtml}
+            </div>
+          </div>
+
+          <div class="cumulative-box">
+            <div class="cumulative-label">
+              <span>💡 Coche les difficultés combinées (1 = Niv.1 | 2 = Niv.2 | 3+ = Niv.3) :</span>
+              <span style="font-weight:800; font-size:0.75rem;">Total : ${selectedCount}</span>
+            </div>
+            <div class="criteria-chips-grid">
+              ${defaultChipsHtml}
+              ${customChipsHtml}
+            </div>
+
+            <div class="custom-input-row" style="margin-top:8px;">
+              <input type="text" id="newCritInput-${family}-${itemIdx}" placeholder="Ajouter une autre difficulté (ex: yeux fermés, en musique...)"
+                onkeydown="if(event.key==='Enter'){ event.preventDefault(); addCustomCriterion('${family}', ${itemIdx}); }">
+              <button type="button" class="btn-action-small" onclick="addCustomCriterion('${family}', ${itemIdx})">➕ Ajouter</button>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:0.75rem; font-weight:800; color:#475569; display:block; margin-bottom:3px;">
+              📝 Précisions / Critères de réussite personnels (optionnel) :
+            </label>
+            <input type="text" class="family-desc-input" value="${escapeHtml(item.desc || '')}" 
+              placeholder="Ex: Réussir 6 lancers consécutifs sans faire tomber..."
+              oninput="handleArtistItemDescChange('${family}', ${itemIdx}, this.value)">
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    /* Rendu Acrobatie (FICHES DE FIGURES : NIVEAUX 1, 2, 3 + DESCRIPTION) */
+    function renderAcrobatieItems(items) {
+      const container = document.getElementById("itemsContainer-acrobatie");
+      if (!container) return;
+      container.innerHTML = "";
+
+      items.forEach((item, itemIdx) => {
+        const card = document.createElement("div");
+        card.className = "artist-item-card";
+
+        const deleteBtnHtml = (items.length > 1) 
+          ? `<button type="button" class="btn-class-action" style="color:#ef4444; padding:4px 8px;" title="Supprimer cet élément" onclick="deleteArtistItem('acrobatie', ${itemIdx})">🗑️</button>` 
+          : "";
+
+        const manualLvl = item.manualLevel || 0;
+
+        card.innerHTML = `
+          <div class="artist-item-top">
+            <input type="text" class="artist-item-name-input" value="${escapeHtml(item.title || 'Acrobatie')}" 
+              placeholder="Nom de la figure (ex: Roulade, Roue, Pyramide...)" 
+              oninput="handleArtistItemTitleChange('acrobatie', ${itemIdx}, this.value)">
+
+            <div class="manual-acro-levels">
+              <button type="button" class="manual-acro-btn lvl-1 ${manualLvl === 1 ? 'active' : ''}" onclick="setManualAcroLevel(${itemIdx}, 1)">Niveau 1</button>
+              <button type="button" class="manual-acro-btn lvl-2 ${manualLvl === 2 ? 'active' : ''}" onclick="setManualAcroLevel(${itemIdx}, 2)">Niveau 2</button>
+              <button type="button" class="manual-acro-btn lvl-3 ${manualLvl === 3 ? 'active' : ''}" onclick="setManualAcroLevel(${itemIdx}, 3)">Niveau 3</button>
+              ${deleteBtnHtml}
+            </div>
+          </div>
+
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px; margin-bottom:8px;">
+            <div style="font-size:0.75rem; color:#475569; margin-bottom:6px;">
+              📋 Reporte ici le niveau et la figure choisis sur tes <strong>fiches d'acrobatie</strong> remises par le professeur :
+            </div>
+            <label style="font-size:0.75rem; font-weight:800; color:#0f766e; display:block; margin-bottom:3px;">
+              📝 Description de la figure d'acrobatie :
+            </label>
+            <input type="text" class="family-desc-input" value="${escapeHtml(item.desc || '')}" 
+              placeholder="Ex: Roulade avant arrivée debout sans les mains, Porteur pyramide genoux..."
+              oninput="handleArtistItemDescChange('acrobatie', ${itemIdx}, this.value)">
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function addArtistItem(family) {
+      if (activeArtistStudentIdx === null) return;
+      const profile = activeData.artistProfiles[activeArtistStudentIdx];
+      if (!profile[family]) profile[family] = [];
+
+      const count = profile[family].length + 1;
+      if (family === "acrobatie") {
+        profile.acrobatie.push({
+          title: `Acrobatie ${count}`,
+          manualLevel: 0,
+          desc: ""
+        });
+        saveCurrentData();
+        renderAcrobatieItems(profile.acrobatie);
+      } else {
+        const defaultName = (family === "manipulation") ? `Manipulation ${count}` : `Équilibre ${count}`;
+        profile[family].push({
+          title: defaultName,
+          selectedCriteria: [],
+          customCriteria: [],
+          desc: ""
+        });
+        saveCurrentData();
+        renderCumulativeFamilyItems(family, profile[family]);
+      }
+    }
+
+    function deleteArtistItem(family, itemIdx) {
+      if (activeArtistStudentIdx === null) return;
+      const profile = activeData.artistProfiles[activeArtistStudentIdx];
+      if (profile[family] && profile[family].length > 1) {
+        profile[family].splice(itemIdx, 1);
+        saveCurrentData();
+        if (family === "acrobatie") {
+          renderAcrobatieItems(profile.acrobatie);
+        } else {
+          renderCumulativeFamilyItems(family, profile[family]);
+        }
+      }
+    }
+
+    function toggleCumulativeCriterion(family, itemIdx, crit) {
+      if (activeArtistStudentIdx === null) return;
+      const item = activeData.artistProfiles[activeArtistStudentIdx][family][itemIdx];
+      if (!item) return;
+
+      if (!Array.isArray(item.selectedCriteria)) item.selectedCriteria = [];
+      
+      // Recherche de la clé (ou rétro-compatibilité avec le label)
+      let idx = item.selectedCriteria.indexOf(crit);
+      if (idx === -1) {
+        // vérifie si un critère porte ce label ou cet id
+        const critList = CUMULATIVE_CRITERIA[family] || [];
+        const found = critList.find(c => c.id === crit || c.label === crit);
+        if (found) {
+          idx = item.selectedCriteria.indexOf(found.label);
+        }
+      }
+
+      if (idx >= 0) {
+        item.selectedCriteria.splice(idx, 1);
+      } else {
+        item.selectedCriteria.push(crit);
+      }
+
+      saveCurrentData();
+      renderCumulativeFamilyItems(family, activeData.artistProfiles[activeArtistStudentIdx][family]);
+    }
+
+    function addCustomCriterion(family, itemIdx) {
+      if (activeArtistStudentIdx === null) return;
+      const input = document.getElementById(`newCritInput-${family}-${itemIdx}`);
+      if (!input) return;
+      const val = input.value.trim();
+      if (!val) return;
+
+      const item = activeData.artistProfiles[activeArtistStudentIdx][family][itemIdx];
+      if (!item) return;
+
+      if (!Array.isArray(item.customCriteria)) item.customCriteria = [];
+      if (!Array.isArray(item.selectedCriteria)) item.selectedCriteria = [];
+
+      if (!item.customCriteria.includes(val)) {
+        item.customCriteria.push(val);
+      }
+      if (!item.selectedCriteria.includes(val)) {
+        item.selectedCriteria.push(val);
+      }
+
+      input.value = "";
+      saveCurrentData();
+      renderCumulativeFamilyItems(family, activeData.artistProfiles[activeArtistStudentIdx][family]);
+    }
+
+    function deleteCustomCriterion(family, itemIdx, crit) {
+      if (activeArtistStudentIdx === null) return;
+      const item = activeData.artistProfiles[activeArtistStudentIdx][family][itemIdx];
+      if (!item) return;
+
+      if (Array.isArray(item.customCriteria)) {
+        const cIdx = item.customCriteria.indexOf(crit);
+        if (cIdx >= 0) item.customCriteria.splice(cIdx, 1);
+      }
+      if (Array.isArray(item.selectedCriteria)) {
+        const sIdx = item.selectedCriteria.indexOf(crit);
+        if (sIdx >= 0) item.selectedCriteria.splice(sIdx, 1);
+      }
+
+      saveCurrentData();
+      renderCumulativeFamilyItems(family, activeData.artistProfiles[activeArtistStudentIdx][family]);
+    }
+
+    function setManualAcroLevel(itemIdx, level) {
+      if (activeArtistStudentIdx === null) return;
+      const item = activeData.artistProfiles[activeArtistStudentIdx].acrobatie[itemIdx];
+      if (!item) return;
+
+      item.manualLevel = (item.manualLevel === level) ? 0 : level;
+      saveCurrentData();
+      renderAcrobatieItems(activeData.artistProfiles[activeArtistStudentIdx].acrobatie);
+    }
+
+    function handleArtistItemTitleChange(family, itemIdx, title) {
+      if (activeArtistStudentIdx === null) return;
+      const item = activeData.artistProfiles[activeArtistStudentIdx][family][itemIdx];
+      if (item) {
+        item.title = title;
+        saveCurrentData();
+      }
+    }
+
+    function handleArtistItemDescChange(family, itemIdx, desc) {
+      if (activeArtistStudentIdx === null) return;
+      const item = activeData.artistProfiles[activeArtistStudentIdx][family][itemIdx];
+      if (item) {
+        item.desc = desc;
+        saveCurrentData();
+      }
+    }
+
+    /* ÉVALUATION INDIVIDUELLE DE L'ARTISTE */
+    function renderArtistEvaluation() {
+      if (activeArtistStudentIdx === null) return;
+      const profile = activeData.artistProfiles[activeArtistStudentIdx];
+      const studentName = activeData.students[activeArtistStudentIdx] || `Artiste ${activeArtistStudentIdx + 1}`;
+
+      const targetLabel = document.getElementById("evalArtistTargetLabel");
+      if (targetLabel) {
+        targetLabel.textContent = `🤸 Artiste : ${studentName}`;
+      }
+
+      const currentLvl = profile ? profile.evalArtist : "";
+      for (let lvl = 1; lvl <= 4; lvl++) {
+        const btn = document.getElementById(`evalArtist-${lvl}`);
+        if (btn) {
+          btn.classList.toggle("active", currentLvl === String(lvl));
+        }
+      }
+
+      const noteEl = document.getElementById("artistProfNote");
+      if (noteEl) {
+        noteEl.value = (profile && profile.profNote) ? profile.profNote : "";
+      }
+    }
+
+    function setArtistMasteryLevel(levelStr) {
+      if (activeArtistStudentIdx === null) return;
+      const profile = activeData.artistProfiles[activeArtistStudentIdx];
+      if (!profile) return;
+      profile.evalArtist = (profile.evalArtist === levelStr) ? "" : levelStr;
+      saveCurrentData();
+      renderArtistEvaluation();
+    }
+
+    function handleArtistProfNoteChange() {
+      if (activeArtistStudentIdx === null) return;
+      const profile = activeData.artistProfiles[activeArtistStudentIdx];
+      const noteEl = document.getElementById("artistProfNote");
+      if (profile && noteEl) {
+        profile.profNote = noteEl.value;
+        saveCurrentData();
+      }
+    }
+
+    /* ======================================================== */
+    /* CARNET DE CHORÉGRAPHE : NAVIGATION PAR ÉTAPE             */
+    /* ======================================================== */
+    function goToStep(idx) {
+      stopAnimation();
+      activeStepIdx = idx;
+      activeMomentIdx = 0;
+
+      document.querySelectorAll(".tab-btn").forEach((btn, bIdx) => {
+        btn.classList.toggle("active", bIdx === idx);
+      });
+
+      renderStepView();
+    }
+
+    function renderStepView() {
+      const step = activeData.steps[activeStepIdx];
+      const stepHeaderTitle = document.getElementById("stepHeaderTitle");
+      if (stepHeaderTitle) {
+        stepHeaderTitle.innerHTML = `<span>${NARRATIVE_STEPS[activeStepIdx].title}</span> <span style="font-weight:normal; font-size:0.8rem; color:#64748b;">— ${NARRATIVE_STEPS[activeStepIdx].desc}</span>`;
+      }
+
+      renderChoreoChips();
+      renderChipsGroup("emotionsContainer", DEFAULT_EMOTIONS, activeData.customEmotions, step.emotions, "emotion");
+      renderChipsGroup("spaceContainer", DEFAULT_SPACE, activeData.customSpace, step.space, "space");
+      renderChipsGroup("timeContainer", DEFAULT_TIME, activeData.customTime, step.time, "time");
+      
+      renderMomentsBar();
+      renderStageElements();
+      renderStepEvaluation();
+    }
+
+    function renderChoreoChips() {
+      const container = document.getElementById("choreoChipsWrap");
+      if (!container) return;
+      container.innerHTML = "";
+      const valid = getValidStudents();
+      const step = activeData.steps[activeStepIdx];
+
+      if (valid.length === 0) {
+        container.innerHTML = `<span style="font-size:0.8rem; color:#94a3b8; font-style:italic;">Inscris d'abord les artistes ci-dessus pour désigner les chorégraphes.</span>`;
+        return;
+      }
+
+      valid.forEach(st => {
+        const isChoreo = step.choreographers.includes(st.name);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "choreo-chip-btn" + (isChoreo ? " is-active" : "");
+        btn.innerHTML = `${isChoreo ? "👑" : "👤"} ${escapeHtml(st.name)}`;
+        btn.onclick = () => toggleChoreographer(st.name);
+        container.appendChild(btn);
+      });
+    }
+
+    function toggleChoreographer(name) {
+      const step = activeData.steps[activeStepIdx];
+      const idx = step.choreographers.indexOf(name);
+      if (idx >= 0) {
+        step.choreographers.splice(idx, 1);
+      } else {
+        step.choreographers.push(name);
+      }
+      saveCurrentData();
+      renderChoreoChips();
+      renderStageElements();
+      renderStepEvaluation();
+    }
+
+    function renderChipsGroup(containerId, defaults, customList, selectedList, type) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = "";
+
+      defaults.forEach(item => {
+        const isSel = selectedList.includes(item);
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "chip-item" + (isSel ? " active" : "");
+        chip.textContent = item;
+        chip.onclick = () => toggleChipSelection(selectedList, item);
+        container.appendChild(chip);
+      });
+
+      customList.forEach(item => {
+        const isSel = selectedList.includes(item);
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "chip-item custom" + (isSel ? " active" : "");
+        chip.innerHTML = `<span>✨ ${escapeHtml(item)}</span><span class="chip-delete-btn" title="Supprimer">×</span>`;
+        chip.onclick = (e) => {
+          if (e.target.classList.contains("chip-delete-btn")) {
+            e.stopPropagation();
+            removeCustomChip(type, item);
+          } else {
+            toggleChipSelection(selectedList, item);
+          }
+        };
+        container.appendChild(chip);
+      });
+    }
+
+    function toggleChipSelection(list, value) {
+      const idx = list.indexOf(value);
+      if (idx >= 0) list.splice(idx, 1);
+      else list.push(value);
+      saveCurrentData();
+      renderStepView();
+    }
+
+    function handleCustomKey(e, type) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addCustomChip(type);
+      }
+    }
+
+    function addCustomChip(type) {
+      let inputId = "";
+      let targetList = null;
+
+      if (type === "emotion") {
+        inputId = "newEmotionInput";
+        targetList = activeData.customEmotions;
+      } else if (type === "space") {
+        inputId = "newSpaceInput";
+        targetList = activeData.customSpace;
+      } else if (type === "time") {
+        inputId = "newTimeInput";
+        targetList = activeData.customTime;
+      } else if (type === "energy") {
+        inputId = "newEnergyInput";
+        targetList = activeData.customEnergy;
+      } else if (type === "procedure") {
+        inputId = "newProcedureInput";
+        targetList = activeData.customProcedures;
+      }
+
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      const val = input.value.trim();
+      if (val.length === 0) return;
+
+      if (!targetList.includes(val)) {
+        targetList.push(val);
+      }
+
+      const step = activeData.steps[activeStepIdx];
+      let stepTarget = null;
+      if (type === "emotion") stepTarget = step.emotions;
+      if (type === "space") stepTarget = step.space;
+      if (type === "time") stepTarget = step.time;
+      if (type === "energy") stepTarget = step.energy;
+      if (type === "procedure") stepTarget = step.procedures;
+
+      if (stepTarget && !stepTarget.includes(val)) {
+        stepTarget.push(val);
+      }
+
+      input.value = "";
+      saveCurrentData();
+      renderStepView();
+    }
+
+    function removeCustomChip(type, val) {
+      let targetList = null;
+      if (type === "emotion") targetList = activeData.customEmotions;
+      if (type === "space") targetList = activeData.customSpace;
+      if (type === "time") targetList = activeData.customTime;
+      if (type === "energy") targetList = activeData.customEnergy;
+      if (type === "procedure") targetList = activeData.customProcedures;
+
+      if (targetList) {
+        const idx = targetList.indexOf(val);
+        if (idx >= 0) targetList.splice(idx, 1);
+      }
+
+      activeData.steps.forEach(step => {
+        let stepList = null;
+        if (type === "emotion") stepList = step.emotions;
+        if (type === "space") stepList = step.space;
+        if (type === "time") stepList = step.time;
+        if (type === "energy") stepList = step.energy;
+        if (type === "procedure") stepList = step.procedures;
+        if (stepList) {
+          const sIdx = stepList.indexOf(val);
+          if (sIdx >= 0) stepList.splice(sIdx, 1);
+        }
+      });
+
+      saveCurrentData();
+      renderStepView();
+    }
+
+    /* TABLEAUX / MOMENTS PAR ÉTAPE */
+    function renderMomentsBar() {
+      const container = document.getElementById("momentsPillsGroup");
+      if (!container) return;
+      container.innerHTML = "";
+      const step = activeData.steps[activeStepIdx];
+
+      step.moments.forEach((m, idx) => {
+        const pill = document.createElement("button");
+        pill.type = "button";
+        pill.className = "moment-pill" + (idx === activeMomentIdx ? " active" : "");
+        pill.textContent = m.label || `Tableau ${idx + 1}`;
+        pill.onclick = () => selectMoment(idx);
+        container.appendChild(pill);
+      });
+
+      const noteInput = document.getElementById("momentNoteInput");
+      const curMoment = step.moments[activeMomentIdx];
+      if (noteInput && curMoment) {
+        noteInput.value = curMoment.actionNote || "";
+      }
+    }
+
+    function selectMoment(idx) {
+      stopAnimation();
+      activeMomentIdx = idx;
+      renderMomentsBar();
+      renderStageElements();
+    }
+
+    function addNewMoment() {
+      stopAnimation();
+      const step = activeData.steps[activeStepIdx];
+      if (step.moments.length >= 5) {
+        showAnimationNotice("5 tableaux maximum par étape narrative");
+        return;
+      }
+
+      const prevMoment = step.moments[step.moments.length - 1];
+      const inheritedPositions = JSON.parse(JSON.stringify(prevMoment.positions));
+      const inheritedBackstage = prevMoment.backstage ? [...prevMoment.backstage] : [];
+
+      const newMoment = {
+        label: `Tableau ${step.moments.length + 1}`,
+        actionNote: "",
+        positions: inheritedPositions,
+        backstage: inheritedBackstage
+      };
+
+      step.moments.push(newMoment);
+      activeMomentIdx = step.moments.length - 1;
+      saveCurrentData();
+      renderMomentsBar();
+      renderStageElements();
+    }
+
+    function deleteCurrentMoment() {
+      stopAnimation();
+      const step = activeData.steps[activeStepIdx];
+      if (step.moments.length <= 1) {
+        showAnimationNotice("Il faut garder au moins un tableau pour cette étape !");
+        return;
+      }
+
+      step.moments.splice(activeMomentIdx, 1);
+      step.moments.forEach((m, i) => {
+        m.label = `Tableau ${i + 1}`;
+      });
+
+      if (activeMomentIdx >= step.moments.length) {
+        activeMomentIdx = step.moments.length - 1;
+      }
+
+      saveCurrentData();
+      renderMomentsBar();
+      renderStageElements();
+    }
+
+    function handleMomentNoteChange() {
+      const noteInput = document.getElementById("momentNoteInput");
+      const step = activeData.steps[activeStepIdx];
+      const curMoment = step.moments[activeMomentIdx];
+      if (curMoment && noteInput) {
+        curMoment.actionNote = noteInput.value;
+        saveCurrentData();
+      }
+    }
+
+    function togglePerformerBackstage(studentIdx) {
+      const step = activeData.steps[activeStepIdx];
+      const curMoment = step.moments[activeMomentIdx];
+      if (!curMoment) return;
+      if (!Array.isArray(curMoment.backstage)) curMoment.backstage = [];
+
+      const bIdx = curMoment.backstage.indexOf(studentIdx);
+      if (bIdx >= 0) {
+        curMoment.backstage.splice(bIdx, 1);
+      } else {
+        curMoment.backstage.push(studentIdx);
+      }
+
+      saveCurrentData();
+      renderStageElements();
+    }
+
+    /* RENDU DE LA SCÈNE ET DÉPLACEMENTS DES PIONS */
+    function renderStageElements() {
+      const tokensLayer = document.getElementById("tokensLayer");
+      const ghostLayer = document.getElementById("ghostLayer");
+      const svgTrajectoryGroup = document.getElementById("svgTrajectoryGroup");
+      const coulissesContainer = document.getElementById("coulissesChipsContainer");
+      
+      if (!tokensLayer || !ghostLayer || !svgTrajectoryGroup) return;
+      tokensLayer.innerHTML = "";
+      ghostLayer.innerHTML = "";
+      svgTrajectoryGroup.innerHTML = "";
+      if (coulissesContainer) coulissesContainer.innerHTML = "";
+
+      const students = getValidStudents();
+      const step = activeData.steps[activeStepIdx];
+      const currentMoment = step.moments[activeMomentIdx];
+      if (!currentMoment) return;
+      if (!Array.isArray(currentMoment.backstage)) currentMoment.backstage = [];
+
+      const prevMoment = activeMomentIdx > 0 ? step.moments[activeMomentIdx - 1] : null;
+      if (prevMoment && !Array.isArray(prevMoment.backstage)) prevMoment.backstage = [];
+
+      const stepChoreos = Array.isArray(step.choreographers) ? step.choreographers : [];
+
+      // Boutons de coulisses
+      students.forEach(st => {
+        const isBackstage = currentMoment.backstage.includes(st.index);
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "performer-presence-chip " + (isBackstage ? "in-wings" : "on-stage");
+        chip.innerHTML = isBackstage 
+          ? `🚪 ${escapeHtml(st.name)} <span style="font-size:0.7rem;">(coulisses)</span>` 
+          : `🎪 ${escapeHtml(st.name)} <span style="font-size:0.7rem;">(en scène)</span>`;
+        chip.title = isBackstage 
+          ? `Cliquer pour faire entrer ${st.name} sur scène` 
+          : `Cliquer pour envoyer ${st.name} dans les coulisses`;
+        chip.onclick = () => togglePerformerBackstage(st.index);
+        if (coulissesContainer) coulissesContainer.appendChild(chip);
+      });
+
+      // Pions et flèches
+      students.forEach(st => {
+        const isCurrentBackstage = currentMoment.backstage.includes(st.index);
+        const isPrevBackstage = prevMoment ? prevMoment.backstage.includes(st.index) : false;
+
+        let curPos = currentMoment.positions[st.index];
+        if (!curPos) {
+          curPos = { x: 20 + st.index * 12, y: 35 };
+          currentMoment.positions[st.index] = curPos;
+        }
+
+        const isChoreo = stepChoreos.includes(st.name);
+
+        if (prevMoment && prevMoment.positions[st.index] && !isPrevBackstage) {
+          const prevPos = prevMoment.positions[st.index];
+
+          if (!isCurrentBackstage) {
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", `${prevPos.x}%`);
+            line.setAttribute("y1", `${prevPos.y}%`);
+            line.setAttribute("x2", `${curPos.x}%`);
+            line.setAttribute("y2", `${curPos.y}%`);
+            line.setAttribute("stroke", st.color);
+            line.setAttribute("stroke-width", "3");
+            line.setAttribute("stroke-dasharray", "4 4");
+            line.setAttribute("marker-end", "url(#arrowHead)");
+            svgTrajectoryGroup.appendChild(line);
+
+            const ghostNode = document.createElement("div");
+            ghostNode.className = "performer-ghost-node";
+            ghostNode.style.left = `${prevPos.x}%`;
+            ghostNode.style.top = `${prevPos.y}%`;
+            ghostNode.style.backgroundColor = st.color;
+            ghostNode.innerHTML = `<span>${escapeHtml(st.name.substring(0, 3))}</span>`;
+            ghostLayer.appendChild(ghostNode);
+          }
+        }
+
+        if (isCurrentBackstage) {
+          return;
+        }
+
+        const token = document.createElement("div");
+        token.id = `token-student-${st.index}`;
+        token.className = "performer-node" + (isChoreo ? " is-choreo" : "");
+        token.style.left = `${curPos.x}%`;
+        token.style.top = `${curPos.y}%`;
+        token.style.backgroundColor = st.color;
+
+        let labelHtml = `<span>${escapeHtml(st.name.substring(0, 5))}</span>`;
+        if (isChoreo) {
+          labelHtml += `<div class="crown-icon">👑</div>`;
+        }
+        token.innerHTML = labelHtml;
+
+        attachDragBehavior(token, curPos, st.index);
+        tokensLayer.appendChild(token);
+      });
+    }
+
+    function attachDragBehavior(node, posObj, studentIdx) {
+      let isDragging = false;
+      const stage = document.getElementById("stageCanvas");
+
+      function startDrag(e) {
+        if (isPlayingAnimation) return;
+        isDragging = true;
+        document.addEventListener("mousemove", onDragMove);
+        document.addEventListener("mouseup", endDrag);
+        document.addEventListener("touchmove", onDragMove, { passive: false });
+        document.addEventListener("touchend", endDrag);
+      }
+
+      function onDragMove(e) {
+        if (!isDragging) return;
+        const rect = stage.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        let xPercent = ((clientX - rect.left) / rect.width) * 100;
+        let yPercent = ((clientY - rect.top) / rect.height) * 100;
+
+        xPercent = Math.max(6, Math.min(94, Math.round(xPercent)));
+        yPercent = Math.max(8, Math.min(88, Math.round(yPercent)));
+
+        posObj.x = xPercent;
+        posObj.y = yPercent;
+
+        node.style.left = `${xPercent}%`;
+        node.style.top = `${yPercent}%`;
+
+        updateTrajectoryArrowsOnly();
+        if (e.cancelable) e.preventDefault();
+      }
+
+      function endDrag() {
+        if (!isDragging) return;
+        isDragging = false;
+        saveCurrentData();
+        document.removeEventListener("mousemove", onDragMove);
+        document.removeEventListener("mouseup", endDrag);
+        document.removeEventListener("touchmove", onDragMove);
+        document.removeEventListener("touchend", endDrag);
+      }
+
+      node.addEventListener("mousedown", startDrag);
+      node.addEventListener("touchstart", startDrag, { passive: true });
+    }
+
+    function updateTrajectoryArrowsOnly() {
+      const svgTrajectoryGroup = document.getElementById("svgTrajectoryGroup");
+      if (!svgTrajectoryGroup) return;
+      svgTrajectoryGroup.innerHTML = "";
+
+      const step = activeData.steps[activeStepIdx];
+      const currentMoment = step.moments[activeMomentIdx];
+      const prevMoment = activeMomentIdx > 0 ? step.moments[activeMomentIdx - 1] : null;
+      if (!prevMoment) return;
+
+      const currentBackstage = currentMoment.backstage || [];
+      const prevBackstage = prevMoment.backstage || [];
+
+      const students = getValidStudents();
+      students.forEach(st => {
+        if (currentBackstage.includes(st.index) || prevBackstage.includes(st.index)) return;
+        const prevPos = prevMoment.positions[st.index];
+        const curPos = currentMoment.positions[st.index];
+        if (prevPos && curPos) {
+          const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          line.setAttribute("x1", `${prevPos.x}%`);
+          line.setAttribute("y1", `${prevPos.y}%`);
+          line.setAttribute("x2", `${curPos.x}%`);
+          line.setAttribute("y2", `${curPos.y}%`);
+          line.setAttribute("stroke", st.color);
+          line.setAttribute("stroke-width", "3");
+          line.setAttribute("stroke-dasharray", "4 4");
+          line.setAttribute("marker-end", "url(#arrowHead)");
+          svgTrajectoryGroup.appendChild(line);
+        }
+      });
+    }
+
+    function showAnimationNotice(msg) {
+      const banner = document.getElementById("animNotice");
+      if (!banner) return;
+      banner.textContent = msg;
+      banner.style.display = "block";
+      clearTimeout(window._animNoticeTimer);
+      window._animNoticeTimer = setTimeout(() => {
+        banner.style.display = "none";
+      }, 3000);
+    }
+
+    /* LECTEUR ANIMÉ D'ENCHAÎNEMENT DES TABLEAUX */
+    function togglePlayAnimation() {
+      if (isPlayingAnimation) {
+        stopAnimation();
+      } else {
+        startAnimation();
+      }
+    }
+
+    function startAnimation() {
+      const step = activeData.steps[activeStepIdx];
+      if (!step || !step.moments || step.moments.length <= 1) {
+        showAnimationNotice("💡 Créez au moins 2 tableaux avec ➕ pour animer les déplacements !");
+        return;
+      }
+
+      isPlayingAnimation = true;
+      const playBtn = document.getElementById("playBtn");
+      if (playBtn) {
+        playBtn.textContent = "⏹ Arrêter";
+        playBtn.classList.remove("btn-accent");
+        playBtn.classList.add("btn-danger");
+      }
+
+      const ghostLayer = document.getElementById("ghostLayer");
+      const svgTrajectoryGroup = document.getElementById("svgTrajectoryGroup");
+      if (ghostLayer) ghostLayer.style.display = "none";
+      if (svgTrajectoryGroup) svgTrajectoryGroup.style.display = "none";
+
+      const students = getValidStudents();
+      const firstMoment = step.moments[0];
+      const firstBackstage = firstMoment.backstage || [];
+
+      activeMomentIdx = 0;
+      renderStageElements();
+
+      students.forEach(st => {
+        const token = document.getElementById(`token-student-${st.index}`);
+        const pos = firstMoment.positions[st.index];
+        const isBackstage = firstBackstage.includes(st.index);
+        if (token) {
+          token.classList.remove("animating");
+          if (isBackstage) {
+            token.style.display = "none";
+          } else {
+            token.style.display = "flex";
+            if (pos) {
+              token.style.left = `${pos.x}%`;
+              token.style.top = `${pos.y}%`;
+            }
+          }
+        }
+      });
+
+      document.querySelectorAll(".moment-pill").forEach((pill, pIdx) => {
+        pill.classList.toggle("active", pIdx === 0);
+      });
+      const noteInput = document.getElementById("momentNoteInput");
+      if (noteInput && firstMoment) {
+        noteInput.value = firstMoment.actionNote || "";
+      }
+
+      let animMomentIdx = 1;
+
+      function animateToNextMoment() {
+        if (!isPlayingAnimation) return;
+
+        activeMomentIdx = animMomentIdx;
+
+        document.querySelectorAll(".moment-pill").forEach((pill, pIdx) => {
+          pill.classList.toggle("active", pIdx === animMomentIdx);
+        });
+
+        const curMoment = step.moments[animMomentIdx];
+        const curBackstage = curMoment.backstage || [];
+
+        if (noteInput && curMoment) {
+          noteInput.value = curMoment.actionNote || "";
+        }
+
+        students.forEach(st => {
+          const isBackstage = curBackstage.includes(st.index);
+          const pos = curMoment.positions[st.index];
+          let token = document.getElementById(`token-student-${st.index}`);
+
+          if (isBackstage) {
+            if (token) {
+              token.style.display = "none";
+            }
+          } else {
+            if (!token) {
+              renderStageElements();
+              token = document.getElementById(`token-student-${st.index}`);
+            }
+            if (token && pos) {
+              token.style.display = "flex";
+              token.classList.add("animating");
+              token.style.left = `${pos.x}%`;
+              token.style.top = `${pos.y}%`;
+            }
+          }
+        });
+
+        animationTimer = setTimeout(() => {
+          if (!isPlayingAnimation) return;
+          animMomentIdx = (animMomentIdx + 1) % step.moments.length;
+          animateToNextMoment();
+        }, 1800);
+      }
+
+      animationTimer = setTimeout(animateToNextMoment, 700);
+    }
+
+    function stopAnimation() {
+      if (!isPlayingAnimation) return;
+      isPlayingAnimation = false;
+      clearTimeout(animationTimer);
+
+      const playBtn = document.getElementById("playBtn");
+      if (playBtn) {
+        playBtn.textContent = "▶ Animer / Lecture";
+        playBtn.classList.add("btn-accent");
+        playBtn.classList.remove("btn-danger");
+      }
+
+      const ghostLayer = document.getElementById("ghostLayer");
+      const svgTrajectoryGroup = document.getElementById("svgTrajectoryGroup");
+      if (ghostLayer) ghostLayer.style.display = "block";
+      if (svgTrajectoryGroup) svgTrajectoryGroup.style.display = "block";
+
+      renderMomentsBar();
+      renderStageElements();
+    }
+
+    /* ÉVALUATION PAR ÉTAPE */
+    function renderStepEvaluation() {
+      const step = activeData.steps[activeStepIdx];
+      const choreos = step.choreographers || [];
+      const labelEl = document.getElementById("evalChoreoTargetLabel");
+
+      if (labelEl) {
+        if (choreos.length > 0) {
+          labelEl.textContent = `👑 Chorégraphe(s) : ${choreos.join(", ")}`;
+        } else {
+          labelEl.textContent = `👑 Chorégraphe(s) : Aucun`;
+        }
+      }
+
+      for (let lvl = 1; lvl <= 4; lvl++) {
+        const btnChoreo = document.getElementById(`evalChoreo-${lvl}`);
+        if (btnChoreo) {
+          btnChoreo.classList.toggle("active", step.evalChoreo === String(lvl));
+        }
+      }
+
+      const noteEl = document.getElementById("stepProfNote");
+      if (noteEl) {
+        noteEl.value = step.profNote || "";
+      }
+    }
+
+    function setMasteryLevel(levelStr) {
+      const step = activeData.steps[activeStepIdx];
+      step.evalChoreo = step.evalChoreo === levelStr ? "" : levelStr;
+      saveCurrentData();
+      renderStepEvaluation();
+    }
+
+    function handleStepProfNoteChange() {
+      const noteEl = document.getElementById("stepProfNote");
+      const step = activeData.steps[activeStepIdx];
+      if (noteEl && step) {
+        step.profNote = noteEl.value;
+        saveCurrentData();
+      }
+    }
+
+    /* VUE BILAN D'ENSEMBLE DU SPECTACLE */
+    function renderOverview() {
+      const groupLabel = document.getElementById("overviewGroupLabel");
+      if (groupLabel) {
+        groupLabel.textContent = `Classe ${currentClassName} • Groupe ${currentGroup} ${activeData.showTitle ? "— « " + activeData.showTitle + " »" : ""}`;
+      }
+
+      const profilesContainer = document.getElementById("overviewArtistsProfiles");
+      if (profilesContainer) {
+        profilesContainer.innerHTML = "";
+        const valid = getValidStudents();
+        if (valid.length === 0) {
+          profilesContainer.innerHTML = `<span style="font-size:0.75rem; color:#64748b; font-style:italic;">Aucun artiste renseigné.</span>`;
+        } else {
+          valid.forEach(st => {
+            const prof = (activeData.artistProfiles && activeData.artistProfiles[st.index]) ? activeData.artistProfiles[st.index] : null;
+            const card = document.createElement("div");
+            card.style.background = "#ffffff";
+            card.style.border = "1px solid #ccfbf1";
+            card.style.borderRadius = "8px";
+            card.style.padding = "6px 8px";
+            card.style.fontSize = "0.75rem";
+
+            const lvlBadge = (lvl) => {
+              if (lvl === 1) return `<span style="background:#dbeafe; color:#1d4ed8; font-weight:800; padding:1px 5px; border-radius:4px;">Niv. 1</span>`;
+              if (lvl === 2) return `<span style="background:#fed7aa; color:#c2410c; font-weight:800; padding:1px 5px; border-radius:4px;">Niv. 2</span>`;
+              if (lvl >= 3) return `<span style="background:#fef08a; color:#854d0e; font-weight:800; padding:1px 5px; border-radius:4px;">Niv. 3</span>`;
+              return `<span style="color:#94a3b8; font-style:italic;">Non défini</span>`;
+            };
+
+            const getCriterionDisplayName = (famKey, critKey) => {
+              const list = CUMULATIVE_CRITERIA[famKey] || [];
+              const found = list.find(c => c.id === critKey || c.label === critKey);
+              return found ? found.label : critKey;
+            };
+
+            const renderFamSummary = (famIcon, famName, famKey) => {
+              const list = prof && Array.isArray(prof[famKey]) ? prof[famKey] : [];
+              if (list.length === 0) return `<div>${famIcon} ${famName} : <span style="color:#94a3b8; font-style:italic;">Aucun</span></div>`;
+              
+              if (famKey === "acrobatie") {
+                return list.map(it => {
+                  const title = it.title ? `<strong>${escapeHtml(it.title)}</strong> ` : '';
+                  const level = it.manualLevel || 0;
+                  const descTxt = it.desc ? ` — <em>${escapeHtml(it.desc)}</em>` : '';
+                  return `<div>${famIcon} ${title}${lvlBadge(level)}${descTxt}</div>`;
+                }).join('');
+              } else {
+                return list.map(it => {
+                  const title = it.title ? `<strong>${escapeHtml(it.title)}</strong> ` : '';
+                  const count = Array.isArray(it.selectedCriteria) ? it.selectedCriteria.length : 0;
+                  const level = calculateCumulativeLevel(count);
+                  const criteriaLabels = (it.selectedCriteria || []).map(c => getCriterionDisplayName(famKey, c));
+                  const criteriaTxt = (count > 0) ? ` <span style="color:#0f766e;">[${criteriaLabels.map(escapeHtml).join(' + ')}]</span>` : '';
+                  const descTxt = it.desc ? ` — <em>${escapeHtml(it.desc)}</em>` : '';
+                  return `<div>${famIcon} ${title}${lvlBadge(level)}${criteriaTxt}${descTxt}</div>`;
+                }).join('');
+              }
+            };
+
+            const lvlEvalMap = {
+              "1": "🔴 Insuffisant",
+              "2": "🟠 Fragile",
+              "3": "🟢 Satisfaisant",
+              "4": "⭐ Très bien"
+            };
+            const evalArtistText = (prof && prof.evalArtist) ? lvlEvalMap[prof.evalArtist] : "Non évalué";
+
+            card.innerHTML = `
+              <div style="font-weight:800; color:#0f766e; display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+                <div style="display:flex; align-items:center; gap:5px;">
+                  <span style="width:10px; height:10px; border-radius:50%; background:${st.color}; display:inline-block;"></span>
+                  <span>${escapeHtml(st.name)}</span>
+                </div>
+                <span style="font-size:0.7rem; font-weight:800; background:#f1f5f9; padding:2px 6px; border-radius:4px; color:#334155;">${evalArtistText}</span>
+              </div>
+              <div style="line-height:1.45; color:#334155;">
+                ${renderFamSummary('🤹', 'Manip.', 'manipulation')}
+                ${renderFamSummary('🪜', 'Équilibre', 'equilibre')}
+                ${renderFamSummary('🤸', 'Acro.', 'acrobatie')}
+              </div>
+              ${prof && prof.profNote ? `<div style="margin-top:4px; font-size:0.7rem; color:#0f766e; background:#f0fdfa; padding:4px 6px; border-radius:4px; border:1px solid #ccfbf1; font-style:italic;">💬 « ${escapeHtml(prof.profNote)} »</div>` : ""}
+            `;
+            profilesContainer.appendChild(card);
+          });
+        }
+      }
+
+      const grid = document.getElementById("overviewCardsGrid");
+      if (!grid) return;
+      grid.innerHTML = "";
+
+      activeData.steps.forEach((step, sIdx) => {
+        const card = document.createElement("div");
+        card.className = "overview-card";
+
+        const choreosTxt = step.choreographers && step.choreographers.length > 0 
+          ? `👑 ${step.choreographers.map(escapeHtml).join(", ")}` 
+          : "Aucun chorégraphe";
+
+        const emotionsTxt = step.emotions.length > 0 ? step.emotions.map(escapeHtml).join(", ") : "Aucune";
+        const spaceTxt = step.space && step.space.length > 0 ? step.space.map(escapeHtml).join(", ") : "Non renseigné";
+        const timeTxt = step.time && step.time.length > 0 ? step.time.map(escapeHtml).join(", ") : "Non renseigné";
+
+        const lvlMap = {
+          "1": "🔴 Insuffisant",
+          "2": "🟠 Fragile",
+          "3": "🟢 Satisfaisant",
+          "4": "⭐ Très bien"
+        };
+
+        const choreoLvlTxt = lvlMap[step.evalChoreo] || "Non évalué";
+
+        card.innerHTML = `
+          <div class="overview-card-header">
+            <span style="font-weight:800; font-size:0.85rem; color:#1e3a8a;">${NARRATIVE_STEPS[sIdx].title}</span>
+            <span style="font-size:0.75rem; font-weight:700; color:#854d0e;">${choreosTxt}</span>
+          </div>
+
+          <div style="font-size:0.75rem; color:#334155; margin-bottom:4px; line-height:1.4;">
+            <div><strong>🎭 Émotion :</strong> ${emotionsTxt}</div>
+            <div><strong>📐 Espace :</strong> ${spaceTxt}</div>
+            <div><strong>⏱️ Temps :</strong> ${timeTxt}</div>
+          </div>
+
+          <div class="mini-stage-box" id="miniStage${sIdx}">
+            <svg style="position:absolute; width:100%; height:100%; top:0; left:0; pointer-events:none;">
+              <g id="miniSvgGroup${sIdx}"></g>
+            </svg>
+          </div>
+
+          <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:6px; font-size:0.75rem; margin-top:6px;">
+            <div><strong>👑 Évaluation du chorégraphe :</strong> ${choreoLvlTxt}</div>
+            ${step.profNote ? `<div style="margin-top:4px; color:#166534; font-style:italic;">💬 Conseils personnalisés : « ${escapeHtml(step.profNote)} »</div>` : ""}
+          </div>
+        `;
+
+        grid.appendChild(card);
+        renderOverviewMiniStage(sIdx);
+      });
+    }
+
+    function renderOverviewMiniStage(stepIdx) {
+      const stageBox = document.getElementById(`miniStage${stepIdx}`);
+      const svgGroup = document.getElementById(`miniSvgGroup${stepIdx}`);
+      if (!stageBox || !svgGroup) return;
+
+      const step = activeData.steps[stepIdx];
+      const validStudents = getValidStudents();
+      const lastMoment = step.moments[step.moments.length - 1];
+      const firstMoment = step.moments[0];
+      const backstage = lastMoment ? (lastMoment.backstage || []) : [];
+
+      validStudents.forEach(st => {
+        if (backstage.includes(st.index)) return;
+        const pos = lastMoment ? lastMoment.positions[st.index] : null;
+        if (!pos) return;
+
+        if (step.moments.length > 1 && firstMoment && firstMoment.positions[st.index]) {
+          const startPos = firstMoment.positions[st.index];
+          const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          line.setAttribute("x1", `${startPos.x}%`);
+          line.setAttribute("y1", `${startPos.y}%`);
+          line.setAttribute("x2", `${pos.x}%`);
+          line.setAttribute("y2", `${pos.y}%`);
+          line.setAttribute("stroke", st.color);
+          line.setAttribute("stroke-width", "2");
+          line.setAttribute("stroke-dasharray", "3 3");
+          svgGroup.appendChild(line);
+        }
+
+        const dot = document.createElement("div");
+        dot.style.position = "absolute";
+        dot.style.left = `${pos.x}%`;
+        dot.style.top = `${pos.y}%`;
+        dot.style.width = "22px";
+        dot.style.height = "22px";
+        dot.style.borderRadius = "50%";
+        dot.style.backgroundColor = st.color;
+        dot.style.transform = "translate(-50%, -50%)";
+        dot.style.color = "#fff";
+        dot.style.fontSize = "10px";
+        dot.style.fontWeight = "bold";
+        dot.style.display = "flex";
+        dot.style.alignItems = "center";
+        dot.style.justifyContent = "center";
+        dot.style.boxShadow = "0 1px 3px rgba(0,0,0,0.3)";
+        dot.textContent = st.name.substring(0, 2);
+        stageBox.appendChild(dot);
+      });
+    }
+
+    function switchClassGroup() {
+      const groupSelect = document.getElementById("groupSelect");
+      if (groupSelect) {
+        currentGroup = groupSelect.value;
+        loadGroupData();
+      }
+    }
+
+    /* EXPORT & IMPORT DE SÉCURITÉ */
+    function exportDataJSON() {
+      const dump = {};
+      dump["classes_list"] = classesList;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith("cirque_eps_")) {
+          const raw = localStorage.getItem(k);
+          if (raw) dump[k] = JSON.parse(raw);
+        }
+      }
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dump, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `cirque_eps_sauvegarde_${sanitizeKeyPart(currentClassName)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function triggerImportJSON() {
+      const importInput = document.getElementById("importFileInput");
+      if (importInput) importInput.click();
+    }
+
+    function importDataJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed.classes_list && Array.isArray(parsed.classes_list)) {
+            classesList = parsed.classes_list;
+            saveClassesList();
+          }
+          Object.keys(parsed).forEach(k => {
+            if (k !== "classes_list") {
+              localStorage.setItem(k, JSON.stringify(parsed[k]));
+            }
+          });
+          loadClassesList();
+          loadGroupData();
+          showAnimationNotice("Données importées avec succès !");
+        } catch (err) {
+          showAnimationNotice("Fichier JSON invalide.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadClassesList();
+      loadGroupData();
+    });
+
+    /* SERVICE WORKER : fonctionnement hors ligne + critère d'installation */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
+
+    /* GESTION DE L'INSTALLATION COMME VRAIE APPLICATION (PWA) */
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const installBtn = document.getElementById('btnInstallApp');
+      if (installBtn) installBtn.style.display = 'inline-flex';
+    });
+
+    function triggerInstallPWA() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          const installBtn = document.getElementById('btnInstallApp');
+          if (installBtn) installBtn.style.display = 'none';
+        }
+        deferredPrompt = null;
+      });
+    }
+
+    window.addEventListener('appinstalled', () => {
+      const installBtn = document.getElementById('btnInstallApp');
+      if (installBtn) installBtn.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
